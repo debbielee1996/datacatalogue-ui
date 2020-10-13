@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import About from '@/components/general/About.vue'
+import Home from '@/components/general/Home.vue'
 
 import AllDatasets from '@/components/dataset/AllDatasets.vue'
 import AllDataTablesOfDataset from '@/components/dataset/AllDataTablesOfDataset.vue'
+import AddDataset from '@/components/dataset/AddDataset.vue'
 
 import AllDataTables from '@/components/datatable/AllDataTables.vue'
 
@@ -12,8 +13,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'About',
-    component: About
+    name: 'Home',
+    component: Home
   },
   {
     path: '/alldatasets',
@@ -29,6 +30,11 @@ const routes = [
     path: '/dataset/:datasetId/alldatatables',
     name: 'AllDataTablesOfDataset',
     component: AllDataTablesOfDataset
+  },
+  {
+    path: '/adddataset',
+    name: 'AddDataset',
+    component: AddDataset
   }
 ]
 
