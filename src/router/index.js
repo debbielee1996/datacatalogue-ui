@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import About from '@/components/general/About.vue'
+
 import AllDatasets from '@/components/dataset/AllDatasets.vue'
+import AllDataTablesOfDataset from '@/components/dataset/AllDataTablesOfDataset.vue'
+
+import AllDataTables from '@/components/datatable/AllDataTables.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +19,16 @@ const routes = [
     path: '/alldatasets',
     name: 'AllDatasets',
     component: AllDatasets
+  },
+  {
+    path: '/alldatatables',
+    name: 'AllDataTables',
+    component: AllDataTables
+  },
+  {
+    path: '/dataset/:datasetId/alldatatables',
+    name: 'AllDataTablesOfDataset',
+    component: AllDataTablesOfDataset
   }
 ]
 
