@@ -133,10 +133,9 @@ export default {
             this.fileHeaders = results.meta.fields; // get array of headers from csv file
 
             // preset selectedDataTypes to string by default
-            if(this.selectedDataTypes != results.meta.fields.length) {
+            if(this.selectedDataTypes != results.meta.fields.length) { // need this or will get trapped in infinite loop as vue will keep listening for if file!=null
               for (var i=0; i<results.meta.fields.length; i++) {
-                this.selectedDataTypes.push('Text')
-                console.log(results.meta.fields.length)
+                this.selectedDataTypes[i]='Text'
               }
             }
           }.bind(this) // explicitly bind resulst.meta.fields to fileHeaders because its a looped function call [https://stackoverflow.com/questions/48336284/data-does-not-update-in-vue-js; https://medium.com/@thejasonfile/es5-functions-vs-es6-fat-arrow-functions-864033baa1a]
