@@ -1,19 +1,29 @@
 <template>
-  <div>
-    <v-simple-table>
-      <tr v-for="dataset in allDatasets" :key="dataset.id">
-        <v-card
-        elevation="2"
-        outlined
-        tile
-        :to="'/dataset/'+dataset.id+'/alldatatables'"
-        >
-          <v-card-title>{{ dataset.name }}</v-card-title>
-          <v-card-subtitle>{{ dataset.description }}</v-card-subtitle>
-        </v-card>
-      </tr>
-    </v-simple-table>
-  </div>
+  <v-container>
+    <v-card>
+      <v-card-title>
+        Datasets
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="allDatasets"
+        :search="search"
+      >
+        <template v-slot:[`item.name`]="{ item }">
+          <a :href="'/dataset/'+item.id+'/alldatatables'">
+            {{ item.name }}
+          </a>
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -22,7 +32,12 @@ import DatasetService from '@/api/DatasetService'
 export default {
   data() {
     return {
-      allDatasets: []
+      allDatasets: [],
+      search: '',
+      headers: [
+        {text: 'Name', value: 'name'},
+        {text: 'Description', value: 'description'}
+      ]
     }
   },
   methods: {

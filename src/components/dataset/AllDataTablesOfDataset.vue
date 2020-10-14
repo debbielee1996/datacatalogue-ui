@@ -1,19 +1,24 @@
 <template>
-  <div>
-    <v-simple-table>
-      <tr >
-        <v-card
-        elevation="2"
-        outlined
-        tile
-        v-for="dataTable in dataTablesOfDataset" :key="dataTable.id"
-        >
-          <v-card-title>{{ dataTable.name }}</v-card-title>
-          <v-card-subtitle>{{ dataTable.description }}</v-card-subtitle>
-        </v-card>
-      </tr>
-    </v-simple-table>
-  </div>
+  <v-container>
+    <v-card>
+      <v-card-title>
+        Data Tables
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="dataTablesOfDataset"
+        :search="search"
+      >
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -23,6 +28,11 @@ export default {
   data: function() {
     return {
       dataTablesOfDataset: [],
+      search: '',
+      headers: [
+        {text: 'Name', value: 'name'},
+        {text: 'Description', value: 'description'}
+      ],
       datasetId: this.$route.params.datasetId
     }
   },

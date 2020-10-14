@@ -1,20 +1,24 @@
 <template>
-  <div>
-      <v-simple-table>
-        <tr
-        v-for="dataTable in allDataTables" :key="dataTable.id">
-          <v-card
-          elevation="2"
-          outlined
-          tile>
-            <v-card-title>{{ dataTable.name }}</v-card-title>
-            <v-card-subtitle>{{ dataTable.description }}</v-card-subtitle>
-          </v-card>
-        </tr>
-      </v-simple-table>
-
-
-  </div>
+  <v-container>
+    <v-card>
+      <v-card-title>
+        Data Tables
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="allDataTables"
+        :search="search"
+      >
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -23,7 +27,12 @@ import DataTableService from '@/api/DataTableService'
 export default {
   data() {
     return {
-      allDataTables: []
+      allDataTables: [],
+      search: '',
+      headers: [
+        {text: 'Name', value: 'name'},
+        {text: 'Description', value: 'description'}
+      ]
     }
   },
   methods: {
