@@ -4,7 +4,7 @@
       <h2>Add New Dataset</h2>
       <ValidationObserver ref="v-form">
         <v-form>
-          <ValidationProvider name="dataset name" rules="required" v-slot = "{ errors }">
+          <ValidationProvider name="dataset name" rules="required|unique" v-slot = "{ errors }">
             <v-text-field
               v-model="datasetName"
               clearable
@@ -45,7 +45,7 @@ import DatasetService from '@/api/DatasetService'
 import { extend } from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
 
-// Add the required rule
+// Add the required rule. unique rule is done when component is mounted
 extend('required', {
   ...required,
   message: '{_field_} cannot be empty',
@@ -58,7 +58,8 @@ export default {
       datasetDescription: '',
       outputMsg: '',
       succuessfulCreation: false,
-      loading: false
+      loading: false,
+      allDatasets: []
     }
   },
   methods: {
@@ -71,6 +72,13 @@ export default {
           this.loading=false
         })
         .catch(e => console.log(e))
+    },
+    getAllDatasets() {
+      DatasetService.getAllDatasets()
+        .then(response => {
+          this.allDatasets=response.data;
+        })
+        .catch(e => console.log(e))
     }
   },
   computed: {
@@ -80,6 +88,18 @@ export default {
     isLoading() {
       return this.loading
     }
+  },
+  created() {
+    this.getAllDatasets();
+  },
+  mounted() {
+    extend('unique', // checks if dataset name already exists
+    value => {
+      if (this.allDatasets.some(dataset => dataset.name === value)) {
+        return 'Dataset name already exists'
+      }
+      return true // means valid name
+    });
   }
 }
 </script>

@@ -23,6 +23,11 @@
               label="data table name">
             </v-text-field>
           </ValidationProvider>
+          <v-alert
+            type="warning"
+            v-if="dataTableExists"
+            text
+          >Data table already exists. If you upload you will override the existing data</v-alert>
 
           <v-text-field
             v-model="dataTableDescription"
@@ -95,6 +100,7 @@ export default {
   data() {
     return {
       allDatasets: [],
+      allDataTables: [],
       dataTableName: '',
       dataTableDescription: '',
       selectedDatasetId: '',
@@ -111,6 +117,13 @@ export default {
       DatasetService.getAllDatasets()
         .then(response => {
           this.allDatasets=response.data;
+        })
+        .catch(e => console.log(e))
+    },
+    getAllDataTables() {
+      DataTableService.getAllDataTables()
+        .then(response => {
+          this.allDataTables=response.data;
         })
         .catch(e => console.log(e))
     },
@@ -140,8 +153,6 @@ export default {
             }
           }.bind(this) // explicitly bind resulst.meta.fields to fileHeaders because its a looped function call [https://stackoverflow.com/questions/48336284/data-does-not-update-in-vue-js; https://medium.com/@thejasonfile/es5-functions-vs-es6-fat-arrow-functions-864033baa1a]
         });
-
-
         return true // to render whatever template content
       } else {
         console.log("no file")
@@ -151,6 +162,7 @@ export default {
   },
   created() {
     this.getAllDatasets();
+    this.getAllDataTables();
   },
   computed: {
     canAddDataTable() {
@@ -161,6 +173,9 @@ export default {
     },
     fileAdded() {
       return this.parseFile()
+    },
+    dataTableExists() {
+      return this.allDataTables.some(datatable => datatable.name === this.dataTableName)
     }
   }
 }
