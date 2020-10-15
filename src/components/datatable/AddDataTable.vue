@@ -90,6 +90,7 @@ import DatasetService from '@/api/DatasetService'
 import DataTableService from '@/api/DataTableService'
 import { extend } from 'vee-validate'
 import { required } from 'vee-validate/dist/rules'
+import readXlsxFile from 'read-excel-file'
 
 extend('required', {
   ...required,
@@ -100,7 +101,7 @@ export default {
   data() {
     return {
       allDatasets: [],
-      allDataTables: [],
+      allDataTableNames: [],
       dataTableName: '',
       dataTableDescription: '',
       selectedDatasetId: '',
@@ -109,7 +110,15 @@ export default {
       loading: false,
       fileHeaders: [],
       options: ['Text', 'Number', 'Date'],
-      selectedDataTypes: []
+      selectedDataTypes: [],
+      fileExtensions: [
+        "text/comma-separated-values",
+        "application/csv",
+        "application/excel",
+        "application/vnd.ms-excel",
+        "application/vnd.msexcel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ]
     }
   },
   methods: {
@@ -120,10 +129,10 @@ export default {
         })
         .catch(e => console.log(e))
     },
-    getAllDataTables() {
-      DataTableService.getAllDataTables()
+    getAllDataTableNames() {
+      DataTableService.getAllDataTableNames()
         .then(response => {
-          this.allDataTables=response.data;
+          this.allDataTableNames=response.data;
         })
         .catch(e => console.log(e))
     },
@@ -138,35 +147,48 @@ export default {
       })
     },
     parseFile() {
-      if (this.file!=null) {
+      if (this.file!=null && this.hasApprovedFileExtension) {
         // parse file
-        this.$papa.parse(this.file, {
-          header: true,
-          complete: function (results) {
-            this.fileHeaders = results.meta.fields; // get array of headers from csv file
+        if (this.file['type'].includes("csv") || this.file['type'].includes("excel")) {
+            this.$papa.parse(this.file, {
+            header: true,
+            complete: function (results) {
+              this.fileHeaders = results.meta.fields; // get array of headers from csv file
 
-            // preset selectedDataTypes to string by default
-            if(this.selectedDataTypes != results.meta.fields.length) { // need this or will get trapped in infinite loop as vue will keep listening for if file!=null
-              for (var i=0; i<results.meta.fields.length; i++) {
-                this.selectedDataTypes[i]='Text'
+              // preset selectedDataTypes to string by default
+              if(this.selectedDataTypes.length != results.meta.fields.length) { // need this or will get trapped in infinite loop as vue will keep listening for if file!=null
+                for (var i=0; i<this.fileHeaders.length; i++) {
+                  this.selectedDataTypes[i]='Text'
+                }
               }
+            }.bind(this) // explicitly bind resulst.meta.fields to fileHeaders because its a looped function call [https://stackoverflow.com/questions/48336284/data-does-not-update-in-vue-js; https://medium.com/@thejasonfile/es5-functions-vs-es6-fat-arrow-functions-864033baa1a]
+          });
+        } else if (this.file['type'].includes("spreadsheet")) {
+          // preset selectedDataTypes to string by default
+          if(this.selectedDataTypes.length != this.fileHeaders.length) { // need this or will get trapped in infinite loop as vue will keep listening for if file!=null
+            for (var i=0; i<this.fileHeaders.length; i++) {
+              this.selectedDataTypes[i]='Text'
             }
-          }.bind(this) // explicitly bind resulst.meta.fields to fileHeaders because its a looped function call [https://stackoverflow.com/questions/48336284/data-does-not-update-in-vue-js; https://medium.com/@thejasonfile/es5-functions-vs-es6-fat-arrow-functions-864033baa1a]
-        });
+          }
+        }
         return true // to render whatever template content
       } else {
-        console.log("no file")
+        console.log("no file or file extension not supported")
         return false
       }
     }
   },
   created() {
     this.getAllDatasets();
-    this.getAllDataTables();
+    this.getAllDataTableNames();
   },
   computed: {
     canAddDataTable() {
-      return this.dataTableName.length>0 && this.selectedDatasetId>0 && this.file!=null
+      // conditions:
+      // 1. name cannot be empty
+      // 2. must select a dataset
+      // 3. file must be added
+      return this.dataTableName.length>0 && this.selectedDatasetId>0 && this.file!=null && this.hasApprovedFileExtension
     },
     isLoading() {
       return this.loading
@@ -175,7 +197,27 @@ export default {
       return this.parseFile()
     },
     dataTableExists() {
-      return this.allDataTables.some(datatable => datatable.name === this.dataTableName)
+      return this.allDataTableNames.includes(this.dataTableName)
+    },
+    hasApprovedFileExtension() {
+      if (this.file!=null) {
+        return this.fileExtensions.includes(this.file['type'])
+      }
+      return false
+    }
+  },
+  watch: {
+    file: function() { // look for change in files
+      // reset
+      this.fileHeaders=[]
+      this.selectedDataTypes=[]
+
+      // for .xlsx files parse it
+      if (this.file['type'].includes("spreadsheet")) {
+        readXlsxFile(this.file)
+          .then((response) => { this.fileHeaders=response[0] })
+          .catch(e => console.log(e))
+      }
     }
   }
 }

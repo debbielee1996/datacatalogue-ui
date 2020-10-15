@@ -6,6 +6,10 @@ class DatasetService {
     return axios.get(settings.url + '/dataset/get-all-datasets')
   }
 
+  getAllDatasetNames() {
+    return axios.get(settings.url + '/dataset/get-all-dataset-names')
+  }
+
   getDataTablesForDataset(datasetId) {
     return axios.get(settings.url + '/dataset/get-dataset-datatables/'+ datasetId)
   }
