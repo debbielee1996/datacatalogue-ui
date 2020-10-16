@@ -82,6 +82,9 @@
     <v-container v-if="succuessfulCreation">
       <v-alert type="success">Successfully added data file</v-alert>
     </v-container>
+    <v-container v-if="displayErrorMessage">
+      <v-alert text type="error">Error in uploading data file</v-alert>
+    </v-container>
   </div>
 </template>
 
@@ -107,6 +110,7 @@ export default {
       selectedDatasetId: '',
       file: null,
       succuessfulCreation: false,
+      displayErrorMessage: false,
       loading: false,
       fileHeaders: [],
       options: ['Text', 'Number', 'Date'],
@@ -144,6 +148,13 @@ export default {
       .then(() => {
         this.loading=false
         this.succuessfulCreation=true
+        this.displayErrorMessage=false
+      })
+      .catch((e) => {
+        this.loading=false
+        this.succuessfulCreation=false
+        this.displayErrorMessage=true
+        console.log(e)
       })
     },
     parseFile() {
