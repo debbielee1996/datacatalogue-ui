@@ -1,22 +1,23 @@
 <template>
   <div id="app">
+    <component :is="layout">
+      <router-view/>
+    </component>
     <!-- default layout consists of top bar and nav bar. + content from whichever router-view -->
-    <DefaultLayout/>
+    <!-- <DefaultLayout/> -->
   </div>
 </template>
 
 <script>
-import DefaultLayout from '@/components/layouts/DefaultLayout.vue';
+const default_layout = "default";
 
 export default {
   name: 'App',
 
-  components: {
-    DefaultLayout
-  },
-
-  data: () => ({
-    //
-  }),
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || default_layout) + '-layout'
+    }
+  }
 };
 </script>

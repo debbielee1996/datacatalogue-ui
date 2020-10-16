@@ -64,6 +64,13 @@
             <v-list-item-title>{{ alldatatables.title }}</v-list-item-title>
         </v-list-item>
 
+        <v-list-item :to="logout.action">
+            <v-list-item-icon>
+              <v-icon>{{ logout.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ logout.title }}</v-list-item-title>
+        </v-list-item>
+
       </v-list>
     </v-navigation-drawer>
 
@@ -86,7 +93,7 @@
       home: {
         icon: "mdi-home",
         title: "Home",
-        action: "/"
+        action: "/home"
       },
       adddataset: {
         icon: "mdi-new-box",
@@ -107,6 +114,11 @@
         icon: "mdi-file-table",
         title: "All datatables",
         action: "/alldatatables"
+      },
+      logout: {
+        icon: "mdi-logout",
+        title: "Logout",
+        action: "/"
       }
     })
   }

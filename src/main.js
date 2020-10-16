@@ -6,10 +6,16 @@ import axios from 'axios';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import VuePapaParse from 'vue-papa-parse';
 
+import NoSideBar from '@/components/layouts/NoSideBar'
+import DefaultLayout from '@/components/layouts/DefaultLayout'
+
 Vue.config.productionTip = false
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.use(VuePapaParse);
+
+Vue.component('default-layout', DefaultLayout)
+Vue.component('no-sidebar-layout', NoSideBar)
 Vue.prototype.$http = axios
 
 new Vue({
@@ -17,3 +23,4 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
