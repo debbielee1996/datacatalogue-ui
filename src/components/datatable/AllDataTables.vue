@@ -31,13 +31,15 @@ export default {
       search: '',
       headers: [
         {text: 'Name', value: 'name'},
-        {text: 'Description', value: 'description'}
+        {text: 'Description', value: 'description'},
+        {text: 'Created By', value: 'officerPf'},
+        {text: 'Dataset Name', value: 'datasetName'}
       ]
     }
   },
   methods: {
-    getAllDataTables() {
-      DataTableService.getAllDataTables()
+    getAllDataTableDtos() {
+      DataTableService.getAllDataTableDtos()
         .then(response => {
           this.allDataTables=response.data;
         })
@@ -45,7 +47,7 @@ export default {
     }
   },
   created() {
-    this.getAllDataTables();
+    this.getAllDataTableDtos();
   }
 }
 </script>

@@ -36,13 +36,14 @@ export default {
       search: '',
       headers: [
         {text: 'Name', value: 'name'},
-        {text: 'Description', value: 'description'}
+        {text: 'Description', value: 'description'},
+        {text: 'Created By', value: 'officerPf'}
       ]
     }
   },
   methods: {
-    getAllDatasets() {
-      DatasetService.getAllDatasets()
+    getAllDatasetDtos() {
+      DatasetService.getAllDatasetDtos()
         .then(response => {
           this.allDatasets=response.data;
         })
@@ -50,7 +51,7 @@ export default {
     }
   },
   created() {
-    this.getAllDatasets();
+    this.getAllDatasetDtos();
   }
 }
 </script>

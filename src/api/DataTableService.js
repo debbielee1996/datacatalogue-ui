@@ -6,6 +6,10 @@ class DataTableService {
     return axios.get(settings.url + '/datatable/get-all-datatables')
   }
 
+  getAllDataTableDtos() {
+    return axios.get(settings.url + '/datatable/get-all-datatable-dtos')
+  }
+
   getAllDataTableNames() {
     return axios.get(settings.url + '/datatable/get-all-datatable-names')
   }
