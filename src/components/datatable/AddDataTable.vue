@@ -27,7 +27,7 @@
             type="warning"
             v-if="dataTableExists"
             text
-          >Data table already exists. If you upload you will override the existing data</v-alert>
+          >Data table already exists for selected dataset. If you upload you will override the existing data</v-alert>
 
           <v-text-field
             v-model="dataTableDescription"
@@ -104,7 +104,7 @@ export default {
   data() {
     return {
       allDatasets: [],
-      allDataTableNames: [],
+      allDataTableDtos: [],
       dataTableName: '',
       dataTableDescription: '',
       selectedDatasetId: '',
@@ -133,22 +133,21 @@ export default {
         })
         .catch(e => console.log(e))
     },
-    getAllDataTableNames() {
-      DataTableService.getAllDataTableNames()
+    getAllDataTableDtos() {
+      DataTableService.getAllDataTableDtos()
         .then(response => {
-          this.allDataTableNames=response.data;
+          this.allDataTableDtos=response.data;
         })
         .catch(e => console.log(e))
     },
     submitForm() {
-      console.log("selected data types "+this.selectedDataTypes)
-      console.log(typeof(this.selectedDataTypes))
       this.loading=true
       DataTableService.uploadFile(this.file, this.dataTableName, this.selectedDatasetId, this.dataTableDescription, this.selectedDataTypes)
       .then(() => {
         this.loading=false
         this.succuessfulCreation=true
         this.displayErrorMessage=false
+        this.getAllDataTableDtos()
       })
       .catch((e) => {
         this.loading=false
@@ -191,7 +190,7 @@ export default {
   },
   created() {
     this.getAllDatasets();
-    this.getAllDataTableNames();
+    this.getAllDataTableDtos();
   },
   computed: {
     canAddDataTable() {
@@ -199,7 +198,7 @@ export default {
       // 1. name cannot be empty
       // 2. must select a dataset
       // 3. file must be added
-      return this.dataTableName.length>0 && this.selectedDatasetId>0 && this.file!=null && this.hasApprovedFileExtension
+      return this.dataTableName != null && this.dataTableName.length>0 && this.selectedDatasetId>0 && this.file!=null && this.hasApprovedFileExtension
     },
     isLoading() {
       return this.loading
@@ -207,8 +206,8 @@ export default {
     fileAdded() {
       return this.parseFile()
     },
-    dataTableExists() {
-      return this.allDataTableNames.includes(this.dataTableName)
+    dataTableExists() { // check if dataTable exists for given datasetId
+      return this.allDataTableDtos.filter(dt => dt.datasetId===this.selectedDatasetId && dt.name===this.dataTableName).length>0
     },
     hasApprovedFileExtension() {
       if (this.file!=null) {
