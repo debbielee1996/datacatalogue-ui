@@ -126,8 +126,8 @@ export default {
     }
   },
   methods: {
-    getAllDatasets() {
-      DatasetService.getAllDatasets()
+    getAllDatasetDtos() {
+      DatasetService.getAllDatasetDtos()
         .then(response => {
           this.allDatasets=response.data;
         })
@@ -189,7 +189,7 @@ export default {
     }
   },
   created() {
-    this.getAllDatasets();
+    this.getAllDatasetDtos();
     this.getAllDataTableDtos();
   },
   computed: {

@@ -2,16 +2,8 @@ import axios from 'axios';
 import {settings} from '@/settings'
 
 class DatasetService {
-  getAllDatasets() {
-    return axios.get(settings.url + '/dataset/get-all-datasets')
-  }
-
   getAllDatasetDtos() {
     return axios.get(settings.url + '/dataset/get-all-dataset-dtos')
-  }
-
-  getAllDatasetNames() {
-    return axios.get(settings.url + '/dataset/get-all-dataset-names')
   }
 
   getDataTablesForDataset(datasetId) {

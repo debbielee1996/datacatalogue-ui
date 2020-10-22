@@ -59,7 +59,7 @@ export default {
       outputMsg: '',
       succuessfulCreation: false,
       loading: false,
-      allDatasetNames: []
+      allDatasetDtos: []
     }
   },
   methods: {
@@ -73,10 +73,10 @@ export default {
         })
         .catch(e => console.log(e))
     },
-    getAllDatasetNames() {
-      DatasetService.getAllDatasetNames()
+    getAllDatasetDtos() {
+      DatasetService.getAllDatasetDtos()
         .then(response => {
-          this.allDatasetNames=response.data;
+          this.allDatasetDtos=response.data;
         })
         .catch(e => console.log(e))
     }
@@ -92,16 +92,16 @@ export default {
       return this.loading
     },
     datasetExists() {
-      return this.allDatasetNames.includes(this.datasetName)
+      return this.allDatasetDtos.filter(d => d.name ===this.datasetName).length >0
     }
   },
   created() {
-    this.getAllDatasetNames();
+    this.getAllDatasetDtos();
   },
   mounted() {
     extend('unique', // checks if dataset name already exists
     value => {
-      if (this.allDatasetNames.includes(value)) {
+      if (this.allDatasetDtos.filter(d => d.name===value).length >0) {
         return 'Dataset name already exists'
       }
       return true // means valid name
