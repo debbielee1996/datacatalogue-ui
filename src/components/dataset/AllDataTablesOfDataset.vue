@@ -31,7 +31,8 @@ export default {
       search: '',
       headers: [
         {text: 'Name', value: 'name'},
-        {text: 'Description', value: 'description'}
+        {text: 'Description', value: 'description'},
+        {text: 'Created by', value: 'officerPf'}
       ],
       datasetId: this.$route.params.datasetId
     }
