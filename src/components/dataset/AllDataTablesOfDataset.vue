@@ -16,13 +16,18 @@
         :items="dataTablesOfDataset"
         :search="search"
       >
+        <template v-slot:[`item.name`]="{ item }">
+          <a :href="'/datatable/'+item.id+'/allcolumns'">
+            {{ item.name }}
+          </a>
+        </template>
       </v-data-table>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import DataSetService from '@/api/DatasetService';
+import DataTableService from '@/api/DataTableService';
 
 export default {
   data: function() {
@@ -42,7 +47,7 @@ export default {
   },
   methods: {
     getDataTablesOfDataset(datasetId) {
-      DataSetService.getDataTablesForDataset(datasetId)
+      DataTableService.getDataTablesForDataset(datasetId)
         .then(response => {
           this.dataTablesOfDataset=response.data;
         })

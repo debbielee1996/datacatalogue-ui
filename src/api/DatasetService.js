@@ -6,10 +6,6 @@ class DatasetService {
     return axios.get(settings.url + '/dataset/get-all-dataset-dtos')
   }
 
-  getDataTablesForDataset(datasetId) {
-    return axios.get(settings.url + '/dataset/get-dataset-datatables/'+ datasetId)
-  }
-
   createNewDataset(datasetName, datasetDescription) {
     let formData = new FormData();
     formData.append("name", datasetName);

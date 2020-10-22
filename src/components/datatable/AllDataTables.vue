@@ -16,6 +16,11 @@
         :items="allDataTables"
         :search="search"
       >
+        <template v-slot:[`item.name`]="{ item }">
+          <a :href="'/datatable/'+item.id+'/allcolumns'">
+            {{ item.name }}
+          </a>
+        </template>
       </v-data-table>
     </v-card>
   </v-container>

@@ -12,6 +12,7 @@ import AddDataset from '@/components/dataset/AddDataset.vue'
 import AllDataTables from '@/components/datatable/AllDataTables.vue'
 import AddDataTable from '@/components/datatable/AddDataTable.vue'
 
+import AllDataTableColumnsOfDataTable from '@/components/datatablecolumn/AllDataTableColumnsOfDataTable.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ const routes = [
     path: '/adddatafile',
     name: 'AddDataTable',
     component: AddDataTable
+  },
+  {
+    path: '/datatable/:dataTableId/allcolumns',
+    name: 'AllDataTableColumnsOfDataTable',
+    component: AllDataTableColumnsOfDataTable
   }
 ]
 

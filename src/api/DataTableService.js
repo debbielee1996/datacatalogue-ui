@@ -6,6 +6,10 @@ class DataTableService {
     return axios.get(settings.url + '/datatable/get-all-datatable-dtos')
   }
 
+  getDataTablesForDataset(datasetId) {
+    return axios.get(settings.url + '/datatable/get-dataset-datatables/'+ datasetId)
+  }
+
   uploadFile(file, dataTableName, selectedDatasetId, dataTableDescription, selectedDataTypes) {
     let formData = new FormData();
     formData.append("file", file)
