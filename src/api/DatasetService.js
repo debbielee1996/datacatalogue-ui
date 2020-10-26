@@ -12,6 +12,10 @@ class DatasetService {
     formData.append("description", datasetDescription);
     return axios.post(settings.url + '/dataset/create-new-dataset', formData)
   }
+
+  getDatasetsCreatedByOfficer() {
+    return axios.get(settings.url + '/dataset/get-all-datasets-created')
+  }
 }
 
 export default new DatasetService;

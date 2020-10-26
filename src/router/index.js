@@ -8,9 +8,11 @@ import Home from '@/components/general/Home.vue'
 import AllDatasets from '@/components/dataset/AllDatasets.vue'
 import AllDataTablesOfDataset from '@/components/dataset/AllDataTablesOfDataset.vue'
 import AddDataset from '@/components/dataset/AddDataset.vue'
+import AllDatasetsByMe from '@/components/dataset/AllDatasetsByMe.vue'
 
 import AllDataTables from '@/components/datatable/AllDataTables.vue'
 import AddDataTable from '@/components/datatable/AddDataTable.vue'
+import AllDataTablesByMe from '@/components/datatable/AllDataTablesByMe.vue'
 
 import AllDataTableColumnsOfDataTable from '@/components/datatablecolumn/AllDataTableColumnsOfDataTable.vue'
 
@@ -63,6 +65,16 @@ const routes = [
     path: '/datatable/:dataTableId/allcolumns',
     name: 'AllDataTableColumnsOfDataTable',
     component: AllDataTableColumnsOfDataTable
+  },
+  {
+    path: '/mydatasets',
+    name: 'AllDatasetsByMe',
+    component: AllDatasetsByMe
+  },
+  {
+    path: '/mydatatables',
+    name: 'AllDataTablesByMe',
+    component: AllDataTablesByMe
   }
 ]
 

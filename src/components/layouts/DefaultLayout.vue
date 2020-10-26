@@ -64,6 +64,22 @@
             <v-list-item-title>{{ alldatatables.title }}</v-list-item-title>
         </v-list-item>
 
+        <v-divider></v-divider>
+
+        <v-list-item :to="mydatasets.action">
+            <v-list-item-icon>
+              <v-icon>{{ mydatasets.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ mydatasets.title }}</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item :to="mydatatables.action">
+            <v-list-item-icon>
+              <v-icon>{{ mydatatables.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ mydatatables.title }}</v-list-item-title>
+        </v-list-item>
+
         <v-list-item :to="logout.action">
             <v-list-item-icon>
               <v-icon>{{ logout.icon }}</v-icon>
@@ -114,6 +130,16 @@
         icon: "mdi-file-table",
         title: "All datatables",
         action: "/alldatatables"
+      },
+      mydatasets: {
+        icon: "mdi-file-document",
+        title: "My datasets",
+        action: "/mydatasets"
+      },
+      mydatatables: {
+        icon: "mdi-file-table",
+        title: "My datatables",
+        action: "/mydatatables"
       },
       logout: {
         icon: "mdi-logout",
