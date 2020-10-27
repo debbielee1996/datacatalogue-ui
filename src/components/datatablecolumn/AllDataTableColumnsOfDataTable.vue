@@ -8,6 +8,8 @@
       <v-data-table
         :headers="headers"
         :items="dataTableColumns"
+        hide-default-footer
+        disable-pagination
       >
       </v-data-table>
     </v-card>

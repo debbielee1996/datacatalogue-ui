@@ -53,15 +53,29 @@
               <tr>
                 <th>Column Name</th>
                 <th>Data Type</th>
+                <th>Description</th>
               </tr>
               <tr v-for="(header, index) in fileHeaders" :key="header">
-                <td>{{ header }}</td>
-                <td>
+                <td
+                  style="width:20%"
+                >{{ header }}</td>
+                <td
+                  style="width:20%"
+                >
                   <v-select
                     :items="options"
                     :value="header"
                     v-model="selectedDataTypes[index]"
                   />
+                </td>
+                <td>
+                  <v-textarea
+                    solo
+                    name="input-7-4"
+                    label="Description"
+                    rows="1"
+                    v-model="dataColDescriptions[index]"
+                  ></v-textarea>
                 </td>
               </tr>
             </table>
@@ -115,6 +129,7 @@ export default {
       fileHeaders: [],
       options: ['Text', 'Number', 'Date'],
       selectedDataTypes: [],
+      dataColDescriptions: [],
       fileExtensions: [
         "text/comma-separated-values",
         "application/csv",
@@ -142,7 +157,7 @@ export default {
     },
     submitForm() {
       this.loading=true
-      DataTableService.uploadFile(this.file, this.dataTableName, this.selectedDatasetId, this.dataTableDescription, this.selectedDataTypes)
+      DataTableService.uploadFile(this.file, this.dataTableName, this.selectedDatasetId, this.dataTableDescription, this.selectedDataTypes, this.dataColDescriptions)
       .then(() => {
         this.loading=false
         this.succuessfulCreation=true
@@ -169,6 +184,7 @@ export default {
               if(this.selectedDataTypes.length != results.meta.fields.length) { // need this or will get trapped in infinite loop as vue will keep listening for if file!=null
                 for (var i=0; i<this.fileHeaders.length; i++) {
                   this.selectedDataTypes[i]='Text'
+                  this.dataColDescriptions[i]=''
                 }
               }
             }.bind(this) // explicitly bind resulst.meta.fields to fileHeaders because its a looped function call [https://stackoverflow.com/questions/48336284/data-does-not-update-in-vue-js; https://medium.com/@thejasonfile/es5-functions-vs-es6-fat-arrow-functions-864033baa1a]
@@ -178,6 +194,7 @@ export default {
           if(this.selectedDataTypes.length != this.fileHeaders.length) { // need this or will get trapped in infinite loop as vue will keep listening for if file!=null
             for (var i=0; i<this.fileHeaders.length; i++) {
               this.selectedDataTypes[i]='Text'
+              this.dataColDescriptions[i]=''
             }
           }
         }
@@ -236,6 +253,10 @@ export default {
 <style scoped>
   table {
     display: table;
-    width: 50%;
+    width: 100%;
+  }
+
+  th, td {
+    padding: 10px;
   }
 </style>

@@ -37,6 +37,9 @@
     <v-container v-if="succuessfulCreation">
       <v-alert type="success">Successfully added dataset</v-alert>
     </v-container>
+    <v-container v-if="displayErrorMessage">
+      <v-alert text type="error">Error in creating new dataset</v-alert>
+    </v-container>
   </div>
 </template>
 
@@ -58,6 +61,7 @@ export default {
       datasetDescription: '',
       outputMsg: '',
       succuessfulCreation: false,
+      displayErrorMessage: false,
       loading: false,
       allDatasetDtos: []
     }
@@ -66,12 +70,23 @@ export default {
     submitForm() {
       this.loading=true
       DatasetService.createNewDataset(this.datasetName, this.datasetDescription)
-        .then(() => {
-          this.outputMsg='Successfully created new dataset'
-          this.succuessfulCreation=true
+        .then(result => {
           this.loading=false
+          if (result.data==true) {
+            this.outputMsg='Successfully created new dataset'
+            this.succuessfulCreation=true
+            this.displayErrorMessage=false
+            this.getAllDatasetDtos()
+          } else { // most likely issue on SQL server side
+            this.succuessfulCreation=false
+            this.displayErrorMessage=true
+          }
         })
-        .catch(e => console.log(e))
+        .catch(e => {
+          this.loading=false
+          this.succuessfulCreation=false
+          this.displayErrorMessage=true
+          console.log(e) })
     },
     getAllDatasetDtos() {
       DatasetService.getAllDatasetDtos()
