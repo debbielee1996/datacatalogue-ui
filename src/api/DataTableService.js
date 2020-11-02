@@ -24,6 +24,13 @@ class DataTableService {
     formData.append("dataColDescriptions", dataColDescriptions);
     return axios.post(settings.url + '/datatable/upload-file', formData)
   }
+
+  editDataTableDescription(dataTableId, dataTableDescription) {
+    let formData = new FormData()
+    formData.append("dataTableId", dataTableId)
+    formData.append("description", dataTableDescription)
+    return axios.post(settings.url + '/datatable/edit-description', formData)
+  }
 }
 
 export default new DataTableService;
