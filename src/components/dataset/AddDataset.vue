@@ -4,6 +4,7 @@
       <h2>Add New Dataset</h2>
       <ValidationObserver ref="v-form">
         <v-form>
+          <i>The dataset name will be appended automatically with your pf number ie. <u>`datasetname_1001`</u></i>
           <ValidationProvider name="dataset name" rules="required|unique" v-slot = "{ errors }">
             <v-text-field
               v-model="datasetName"
@@ -116,7 +117,8 @@ export default {
   mounted() {
     extend('unique', // checks if dataset name already exists
     value => {
-      if (this.allDatasetDtos.filter(d => d.name===value).length >0) {
+      const valueWithOfficerPf = value + '_1001'
+      if (this.allDatasetDtos.filter(d => d.name===valueWithOfficerPf).length >0) {
         return 'Dataset name already exists'
       }
       return true // means valid name
