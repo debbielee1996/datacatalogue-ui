@@ -108,7 +108,8 @@ export default {
       return this.loading
     },
     datasetExists() {
-      return this.allDatasetDtos.filter(d => d.name ===this.datasetName).length >0
+      const valueWithOfficerPf = this.datasetName + '_1001'
+      return this.allDatasetDtos.filter(d => d.name ===valueWithOfficerPf).length >0
     }
   },
   created() {
