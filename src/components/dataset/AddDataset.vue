@@ -4,7 +4,6 @@
       <h2>Add New Dataset</h2>
       <ValidationObserver ref="v-form">
         <v-form>
-          <i>The dataset name will be appended automatically with your pf number ie. <u>`datasetname_1001`</u></i>
           <ValidationProvider name="dataset name" rules="required|unique" v-slot = "{ errors }">
             <v-text-field
               v-model="datasetName"
@@ -64,7 +63,7 @@ export default {
       succuessfulCreation: false,
       displayErrorMessage: false,
       loading: false,
-      allDatasetDtos: []
+      datanameIsUnique: true
     }
   },
   methods: {
@@ -77,7 +76,6 @@ export default {
             this.outputMsg='Successfully created new dataset'
             this.succuessfulCreation=true
             this.displayErrorMessage=false
-            this.getAllDatasetDtos()
           } else { // most likely issue on SQL server side
             this.succuessfulCreation=false
             this.displayErrorMessage=true
@@ -89,12 +87,13 @@ export default {
           this.displayErrorMessage=true
           console.log(e) })
     },
-    getAllDatasetDtos() {
-      DatasetService.getAllDatasetDtos()
+    datasetNameExists() {
+      const output = DatasetService.datasetNameExists(this.datasetName)
         .then(response => {
-          this.allDatasetDtos=response.data;
-        })
-        .catch(e => console.log(e))
+          this.datanameIsUnique=response.data
+          return response.data
+      })
+      return output
     }
   },
   computed: {
@@ -102,28 +101,17 @@ export default {
       // conditions:
       // 1. name cannot be empty
       // 2. name must be unique
-      return this.datasetName.length>0 && !this.datasetExists
+      return this.datasetName.length>0 && this.datanameIsUnique==true
     },
     isLoading() {
       return this.loading
-    },
-    datasetExists() {
-      const valueWithOfficerPf = this.datasetName + '_1001'
-      return this.allDatasetDtos.filter(d => d.name ===valueWithOfficerPf).length >0
     }
   },
-  created() {
-    this.getAllDatasetDtos();
-  },
   mounted() {
-    extend('unique', // checks if dataset name already exists
-    value => {
-      const valueWithOfficerPf = value + '_1001'
-      if (this.allDatasetDtos.filter(d => d.name===valueWithOfficerPf).length >0) {
-        return 'Dataset name already exists'
-      }
-      return true // means valid name
-    });
+    extend("unique", {
+      validate: this.datasetNameExists,
+      message: "Dataset name already exists"
+    })
   }
 }
 </script>

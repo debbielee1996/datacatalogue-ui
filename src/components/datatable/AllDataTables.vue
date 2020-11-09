@@ -21,6 +21,15 @@
             {{ item.name }}
           </a>
         </template>
+
+        <template v-slot:[`item.officerPf`]="{ item }">
+          <mark
+            v-if="item.officerPf==1001"
+            style="background-color:#DEFABB"
+          ><b>{{ item.officerPf }}</b></mark>
+          <div v-else>{{ item.officerPf }}</div>
+        </template>
+
       </v-data-table>
     </v-card>
   </v-container>

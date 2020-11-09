@@ -16,6 +16,14 @@ class DatasetService {
   getDatasetsCreatedByOfficer() {
     return axios.get(settings.url + '/dataset/get-all-datasets-created')
   }
+
+  datasetNameExists(datasetName) {
+    return axios.get(settings.url + '/dataset/datasetname-exists', {
+      params: {
+        datasetName: datasetName
+      }
+    })
+  }
 }
 
 export default new DatasetService;

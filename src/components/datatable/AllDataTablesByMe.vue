@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Data Tables
+        Data Tables Owned
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -20,6 +20,14 @@
           <a :href="'/datatable/'+item.id+'/allcolumns'">
             {{ item.name }}
           </a>
+        </template>
+
+        <template v-slot:[`item.officerPf`]="{ item }">
+          <mark
+            v-if="item.officerPf==1001"
+            style="background-color:#DEFABB"
+          ><b>{{ item.officerPf }}</b></mark>
+          <div v-else>{{ item.officerPf }}</div>
         </template>
 
         <!-- edit item -->

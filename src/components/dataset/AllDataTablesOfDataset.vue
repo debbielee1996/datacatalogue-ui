@@ -11,6 +11,9 @@
           single-line
         ></v-text-field>
       </v-card-title>
+      <v-card-subtitle>
+        Dataset Name: {{ dataTablesOfDataset[0].datasetName }}
+      </v-card-subtitle>
       <v-data-table
         :headers="headers"
         :items="dataTablesOfDataset"
@@ -20,6 +23,14 @@
           <a :href="'/datatable/'+item.id+'/allcolumns'">
             {{ item.name }}
           </a>
+        </template>
+
+        <template v-slot:[`item.officerPf`]="{ item }">
+          <mark
+            v-if="item.officerPf==1001"
+            style="background-color:#DEFABB"
+          ><b>{{ item.officerPf }}</b></mark>
+          <div v-else>{{ item.officerPf }}</div>
         </template>
       </v-data-table>
     </v-card>

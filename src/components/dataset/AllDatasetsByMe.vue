@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Datasets created
+        Datasets Owned
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -21,6 +21,14 @@
             {{ item.name }}
           </a>
         </template>
+
+        <template v-slot:[`item.officerPf`]="{ item }">
+          <mark
+            v-if="item.officerPf==1001"
+            style="background-color:#DEFABB"
+          ><b>{{ item.officerPf }}</b></mark>
+        </template>
+
       </v-data-table>
     </v-card>
   </v-container>

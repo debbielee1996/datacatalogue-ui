@@ -5,6 +5,11 @@
         Data Columns
         <v-spacer></v-spacer>
       </v-card-title>
+      <v-card-subtitle>
+        Dataset Name: {{ dataTableColumns[0].datasetName }}
+        <br>
+        DataTable Name: {{ dataTableColumns[0].dataTableName }}
+      </v-card-subtitle>
       <v-data-table
         :headers="headers"
         :items="dataTableColumns"
@@ -75,7 +80,6 @@ export default {
         {text: 'Name', value: 'name'},
         {text: 'Type', value: 'type'},
         {text: 'Description', value: 'description'},
-        {text: 'DataTable Name', value: 'dataTableName'},
         {text: 'Actions', value: 'actions'}
       ],
       editDialog: false,
