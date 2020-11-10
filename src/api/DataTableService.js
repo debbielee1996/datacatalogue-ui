@@ -31,6 +31,17 @@ class DataTableService {
     formData.append("description", dataTableDescription)
     return axios.post(settings.url + '/datatable/edit-description', formData)
   }
+
+  dataTableNameIsUnique(dataTableName, datasetId) {
+    if (datasetId.length!=0) {
+      return axios.get(settings.url + '/datatable/datatablename-isunique', {
+        params: {
+          dataTableName: dataTableName,
+          datasetId: datasetId
+        }
+      })
+    }
+  }
 }
 
 export default new DataTableService;

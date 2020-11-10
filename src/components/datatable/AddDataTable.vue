@@ -6,6 +6,7 @@
         <v-form>
           <v-select
             v-model="selectedDatasetId"
+            @change="checkDataTableNameIsUnique()"
             :items="allDatasets"
             item-text="name"
             item-value="id"
@@ -18,6 +19,7 @@
               v-model="dataTableName"
               clearable
               filled
+              @keyup="checkDataTableNameIsUnique()"
               clear-icon="mdi-close-circle"
               :error-messages="errors"
               label="data table name">
@@ -25,17 +27,20 @@
           </ValidationProvider>
           <v-alert
             type="warning"
-            v-if="dataTableExists"
+            v-if="!dataTableNameIsUnique"
             text
           >Data table already exists for selected dataset. If you upload you will override the existing data</v-alert>
 
-          <v-text-field
-            v-model="dataTableDescription"
-            clearable
-            filled
-            clear-icon="mdi-close-circle"
-            label="data table description">
-          </v-text-field>
+          <ValidationProvider name="data table description" rules="required" v-slot = "{ errors }">
+            <v-text-field
+              v-model="dataTableDescription"
+              clearable
+              filled
+              :error-messages="errors"
+              clear-icon="mdi-close-circle"
+              label="data table description">
+            </v-text-field>
+          </ValidationProvider>
 
           <ValidationProvider name="file" rules="required" v-slot = "{ errors }">
             <v-file-input
@@ -69,13 +74,18 @@
                   />
                 </td>
                 <td>
-                  <v-textarea
-                    solo
-                    name="input-7-4"
-                    label="Description"
-                    rows="1"
-                    v-model="dataColDescriptions[index]"
-                  ></v-textarea>
+                  <ValidationProvider name="column description" rules="required" v-slot = "{ errors }">
+                    <v-textarea
+                      solo
+                      name="input-7-4"
+                      label="Description"
+                      rows="1"
+                      clearable
+                      clear-icon="mdi-close-circle"
+                      :error-messages="errors"
+                      v-model="dataColDescriptions[index]"
+                    ></v-textarea>
+                  </ValidationProvider>
                 </td>
               </tr>
             </table>
@@ -97,7 +107,7 @@
       <v-alert type="success">Successfully added data file</v-alert>
     </v-container>
     <v-container v-if="displayErrorMessage">
-      <v-alert text type="error">Error in uploading data file</v-alert>
+      <v-alert text type="error">Error in uploading data file. {{ errorMsg }}</v-alert>
     </v-container>
   </div>
 </template>
@@ -118,7 +128,6 @@ export default {
   data() {
     return {
       allDatasets: [],
-      allDataTableDtos: [],
       dataTableName: '',
       dataTableDescription: '',
       selectedDatasetId: '',
@@ -126,10 +135,11 @@ export default {
       succuessfulCreation: false,
       displayErrorMessage: false,
       loading: false,
+      dataTableNameIsUnique: true,
       fileHeaders: [],
-      options: ['Text', 'Number', 'Date'],
+      options: ['Text', 'Whole number (0 decimal places)', 'Number (2 decimal places)', 'Number (5 decimal places)', 'Date'],
       selectedDataTypes: [],
-      dataColDescriptions: [],
+      dataColDescriptions: [''],
       fileExtensions: [
         "text/comma-separated-values",
         "application/csv",
@@ -137,7 +147,8 @@ export default {
         "application/vnd.ms-excel",
         "application/vnd.msexcel",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      ]
+      ],
+      errorMsg: ''
     }
   },
   methods: {
@@ -148,13 +159,6 @@ export default {
         })
         .catch(e => console.log(e))
     },
-    getAllDataTableDtos() {
-      DataTableService.getAllDataTableDtos()
-        .then(response => {
-          this.allDataTableDtos=response.data;
-        })
-        .catch(e => console.log(e))
-    },
     submitForm() {
       this.loading=true
       DataTableService.uploadFile(this.file, this.dataTableName, this.selectedDatasetId, this.dataTableDescription, this.selectedDataTypes, this.dataColDescriptions)
@@ -162,13 +166,13 @@ export default {
         this.loading=false
         this.succuessfulCreation=true
         this.displayErrorMessage=false
-        this.getAllDataTableDtos()
+        this.errorMsg=''
       })
       .catch((e) => {
         this.loading=false
         this.succuessfulCreation=false
         this.displayErrorMessage=true
-        console.log(e)
+        this.errorMsg=e.response.data
       })
     },
     parseFile() {
@@ -203,19 +207,33 @@ export default {
         console.log("no file or file extension not supported")
         return false
       }
+    },
+    checkDataTableNameIsUnique() {
+      if (this.selectedDatasetId.length!=0) {
+        DataTableService.dataTableNameIsUnique(this.dataTableName, this.selectedDatasetId)
+          .then(response => {
+            this.dataTableNameIsUnique=response.data
+            return response.data
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
     }
   },
   created() {
-    this.getAllDatasetDtos();
-    this.getAllDataTableDtos();
+    this.getAllDatasetDtos()
   },
   computed: {
     canAddDataTable() {
       // conditions:
-      // 1. name cannot be empty
-      // 2. must select a dataset
-      // 3. file must be added
-      return this.dataTableName != null && this.dataTableName.length>0 && this.selectedDatasetId>0 && this.file!=null && this.hasApprovedFileExtension
+      console.log(this.dataColDescriptions.indexOf(''))
+      return this.dataTableName.length>0 && // 1. name cannot be empty
+        this.selectedDatasetId>0 && // 2. must select a dataset
+        this.file!=null && // 3. file must be added
+        this.hasApprovedFileExtension && // 4. file must of appropriate extensions
+        this.dataTableDescription.length>0 && // 5. data table description cannot be empty
+        this.dataColDescriptions.indexOf('') == -1 // 6. data col descriptions cannot be empty
     },
     isLoading() {
       return this.loading
@@ -224,7 +242,7 @@ export default {
       return this.parseFile()
     },
     dataTableExists() { // check if dataTable exists for given datasetId
-      return this.allDataTableDtos.filter(dt => dt.datasetId===this.selectedDatasetId && dt.name===this.dataTableName).length>0
+      return this.checkDataTableNameIsUnique()
     },
     hasApprovedFileExtension() {
       if (this.file!=null) {

@@ -17,8 +17,8 @@ class DatasetService {
     return axios.get(settings.url + '/dataset/get-all-datasets-created')
   }
 
-  datasetNameExists(datasetName) {
-    return axios.get(settings.url + '/dataset/datasetname-exists', {
+  datasetNameIsUnique(datasetName) {
+    return axios.get(settings.url + '/dataset/datasetname-isunique', {
       params: {
         datasetName: datasetName
       }

@@ -15,13 +15,17 @@
             </v-text-field>
           </ValidationProvider>
 
-          <v-text-field
-            v-model="datasetDescription"
-            clearable
-            filled
-            clear-icon="mdi-close-circle"
-            label="dataset description">
-          </v-text-field>
+          <ValidationProvider name="dataset description" rules="required" v-slot= "{ errors }">
+            <v-text-field
+              v-model="datasetDescription"
+              clearable
+              filled
+              :error-messages="errors"
+              clear-icon="mdi-close-circle"
+              label="dataset description">
+            </v-text-field>
+          </ValidationProvider>
+
           <v-btn
             :loading="isLoading"
             class="mr-4"
@@ -87,8 +91,8 @@ export default {
           this.displayErrorMessage=true
           console.log(e) })
     },
-    datasetNameExists() {
-      const output = DatasetService.datasetNameExists(this.datasetName)
+    datasetNameIsUnique() {
+      const output = DatasetService.datasetNameIsUnique(this.datasetName)
         .then(response => {
           this.datanameIsUnique=response.data
           return response.data
@@ -101,7 +105,7 @@ export default {
       // conditions:
       // 1. name cannot be empty
       // 2. name must be unique
-      return this.datasetName.length>0 && this.datanameIsUnique==true
+      return this.datasetName.length>0 && this.datanameIsUnique==true && this.datasetDescription.length>0
     },
     isLoading() {
       return this.loading
@@ -109,7 +113,7 @@ export default {
   },
   mounted() {
     extend("unique", {
-      validate: this.datasetNameExists,
+      validate: this.datasetNameIsUnique,
       message: "Dataset name already exists"
     })
   }
