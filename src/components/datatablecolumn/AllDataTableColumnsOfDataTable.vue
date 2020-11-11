@@ -31,7 +31,7 @@
           >
             <v-card>
               <v-card-title>
-                <span class="headline">Edit {{ item.name }}</span>
+                <span class="headline">Edit {{ editedItem.name }}</span>
                 </v-card-title>
 
               <v-container>

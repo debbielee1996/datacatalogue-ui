@@ -48,7 +48,7 @@
           >
             <v-card>
               <v-card-title>
-                <span class="headline">Edit DataTable Details</span>
+                <span class="headline">Edit {{ editedItem.name }}</span>
               </v-card-title>
 
               <v-container>
