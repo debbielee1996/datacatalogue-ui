@@ -10,8 +10,8 @@
               clearable
               filled
               clear-icon="mdi-close-circle"
-              :error-messages="errors"
-              label="dataset name">
+              :error-messages="errors">
+                <template slot="label">dataset name <b style="color:red">*</b></template>
             </v-text-field>
           </ValidationProvider>
 
@@ -21,8 +21,8 @@
               clearable
               filled
               :error-messages="errors"
-              clear-icon="mdi-close-circle"
-              label="dataset description">
+              clear-icon="mdi-close-circle">
+                <template slot="label">dataset description <b style="color:red">*</b></template>
             </v-text-field>
           </ValidationProvider>
 
@@ -119,3 +119,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

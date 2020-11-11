@@ -10,8 +10,8 @@
             :items="allDatasets"
             item-text="name"
             item-value="id"
-            label="Dataset"
           >
+            <template slot="label">Dataset <b style="color:red">*</b></template>
           </v-select>
 
           <ValidationProvider name="data table name" rules="required" v-slot = "{ errors }">
@@ -21,8 +21,8 @@
               filled
               @keyup="checkDataTableNameIsUnique()"
               clear-icon="mdi-close-circle"
-              :error-messages="errors"
-              label="data table name">
+              :error-messages="errors">
+                <template slot="label">data table name <b style="color:red">*</b></template>
             </v-text-field>
           </ValidationProvider>
           <v-alert
@@ -37,8 +37,8 @@
               clearable
               filled
               :error-messages="errors"
-              clear-icon="mdi-close-circle"
-              label="data table description">
+              clear-icon="mdi-close-circle">
+                <template slot="label">data table description <b style="color:red">*</b></template>
             </v-text-field>
           </ValidationProvider>
 
@@ -78,13 +78,14 @@
                     <v-textarea
                       solo
                       name="input-7-4"
-                      label="Description"
                       rows="1"
                       clearable
                       clear-icon="mdi-close-circle"
                       :error-messages="errors"
                       v-model="dataColDescriptions[index]"
-                    ></v-textarea>
+                    >
+                      <template slot="label">Description <b style="color:red">*</b></template>
+                    </v-textarea>
                   </ValidationProvider>
                 </td>
               </tr>
