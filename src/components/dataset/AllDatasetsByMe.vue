@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Datasets Owned
+        {{ allDatasets.length }} dataset(s) found
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"

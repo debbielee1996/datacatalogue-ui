@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Data Tables Owned
+        {{ allDataTables.length }} data table(s) found
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -44,6 +44,7 @@
             :retain-focus="false"
             v-model="editDialog"
             max-width="500px"
+
           >
             <v-card>
               <v-card-title>

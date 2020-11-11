@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Data Tables
+        {{ allDataTables.length }} data table(s) found
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
