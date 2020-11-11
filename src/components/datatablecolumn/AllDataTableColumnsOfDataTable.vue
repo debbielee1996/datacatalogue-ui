@@ -35,10 +35,14 @@
                 </v-card-title>
 
               <v-container>
-                <v-text-field
-                  v-model="editedItem.description"
-                  label="Description"
-                ></v-text-field>
+                <ValidationProvider name="description" rules="required" v-slot = "{ errors }">
+                  <v-text-field
+                    v-model="editedItem.description"
+                    :error-messages="errors"
+                  >
+                    <template slot=label>Description <b style="color:red">*</b></template>
+                  </v-text-field>
+                </ValidationProvider>
               </v-container>
 
               <!-- save/cancel buttons -->
@@ -54,6 +58,7 @@
                 <v-btn
                   color="blue darken-1"
                   text
+                  :disabled="!canEdit"
                   @click="save"
                 >
                   Save
@@ -69,6 +74,13 @@
 
 <script>
 import DataTableColumnService from '@/api/DataTableColumnService'
+import { extend } from 'vee-validate'
+import { required } from 'vee-validate/dist/rules'
+
+extend('required', {
+  ...required,
+  message: '{_field_} cannot be empty'
+})
 
 export default {
   data() {
@@ -114,6 +126,11 @@ export default {
         .then(() => { this.getAllDataColumnDtos(this.dataTableId) })
         .catch(e => { console.log(e) })
       this.close()
+    }
+  },
+  computed: {
+    canEdit() {
+      return this.editedItem.description.length>0
     }
   }
 }
