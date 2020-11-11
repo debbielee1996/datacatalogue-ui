@@ -2,13 +2,11 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Data Columns
+        Data Table: {{ dataTableColumns[0].dataTableName }}
         <v-spacer></v-spacer>
       </v-card-title>
       <v-card-subtitle>
-        Dataset Name: {{ dataTableColumns[0].datasetName }}
-        <br>
-        DataTable Name: {{ dataTableColumns[0].dataTableName }}
+        Dataset: {{ dataTableColumns[0].datasetName }}
       </v-card-subtitle>
       <v-data-table
         :headers="headers"
@@ -29,10 +27,11 @@
             :retain-focus="false"
             v-model="editDialog"
             max-width="500px"
+            overlay-opacity="0.2"
           >
             <v-card>
               <v-card-title>
-                <span class="headline">Edit DataTableColumn</span>
+                <span class="headline">Edit {{ item.name }}</span>
                 </v-card-title>
 
               <v-container>

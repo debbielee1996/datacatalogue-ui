@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        Data Tables
+        Dataset: {{ dataTablesOfDataset[0].datasetName }}
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -11,9 +11,6 @@
           single-line
         ></v-text-field>
       </v-card-title>
-      <v-card-subtitle>
-        Dataset Name: {{ dataTablesOfDataset[0].datasetName }}
-      </v-card-subtitle>
       <v-data-table
         :headers="headers"
         :items="dataTablesOfDataset"
