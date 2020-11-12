@@ -40,7 +40,7 @@
                     v-model="editedItem.description"
                     :error-messages="errors"
                   >
-                    <template slot=label>Description <b style="color:red">*</b></template>
+                    <template v-slot:label>Description <b style="color:red">*</b></template>
                   </v-text-field>
                 </ValidationProvider>
               </v-container>
