@@ -228,7 +228,6 @@ export default {
   computed: {
     canAddDataTable() {
       // conditions:
-      console.log(this.dataColDescriptions.indexOf(''))
       return this.dataTableName.length>0 && // 1. name cannot be empty
         this.selectedDatasetId>0 && // 2. must select a dataset
         this.file!=null && // 3. file must be added
