@@ -103,9 +103,12 @@ export default {
   computed: {
     canCreateDataset() {
       // conditions:
-      // 1. name cannot be empty
+      // 1. name cannot be null/empty
       // 2. name must be unique
-      return this.datasetName.length>0 && this.datanameIsUnique==true && this.datasetDescription.length>0
+      // 3. description cannot be null/empty
+      return this.datasetName!=null && this.datasetName.length>0 &&
+        this.datanameIsUnique==true &&
+        this.datasetDescription!=null && this.datasetDescription.length>0
     },
     isLoading() {
       return this.loading

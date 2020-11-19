@@ -228,12 +228,12 @@ export default {
   computed: {
     canAddDataTable() {
       // conditions:
-      return this.dataTableName.length>0 && // 1. name cannot be empty
+      return this.dataTableName!=null && this.dataTableName.length>0 && // 1. name cannot be null/empty
         this.selectedDatasetId>0 && // 2. must select a dataset
         this.file!=null && // 3. file must be added
         this.hasApprovedFileExtension && // 4. file must of appropriate extensions
-        this.dataTableDescription.length>0 && // 5. data table description cannot be empty
-        this.dataColDescriptions.indexOf('') == -1 // 6. data col descriptions cannot be empty
+        this.dataTableDescription!=null && this.dataTableDescription.length>0 && // 5. data table description cannot be null/empty
+        !this.dataColDescriptions.includes(null) && this.dataColDescriptions.indexOf('') == -1 // 6. data col descriptions cannot be null/empty
     },
     isLoading() {
       return this.loading
