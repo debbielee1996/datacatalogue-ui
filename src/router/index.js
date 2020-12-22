@@ -15,7 +15,7 @@ import AddDataTable from '@/components/datatable/AddDataTable.vue'
 import AllDataTablesByMe from '@/components/datatable/AllDataTablesByMe.vue'
 
 import AllDataTableColumnsOfDataTable from '@/components/datatablecolumn/AllDataTableColumnsOfDataTable.vue'
-
+import EditDataTableColumnsAccess from '@/components/datatablecolumn/EditDataTableColumnsAccess.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -65,6 +65,11 @@ const routes = [
     path: '/datatable/:dataTableId/allcolumns',
     name: 'AllDataTableColumnsOfDataTable',
     component: AllDataTableColumnsOfDataTable
+  },
+  {
+    path: '/datatable/:dataTableId/SetPermissionallcolumns',
+    name: 'EditDataTableColumnsAccess',
+    component: EditDataTableColumnsAccess
   },
   {
     path: '/mydatasets',

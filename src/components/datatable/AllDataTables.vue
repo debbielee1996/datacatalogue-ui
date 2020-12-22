@@ -16,7 +16,8 @@
         :items="allDataTables"
         :search="search"
       >
-        <template v-slot:[`item.name`]="{ item }">
+      
+        <template v-slot:[`item.all`]="{ item }">
           <a :href="'/datatable/'+item.id+'/allcolumns'">
             {{ item.name }}
           </a>
@@ -49,6 +50,9 @@ export default {
         {text: 'Created By', value: 'officerPf'},
         {text: 'Dataset Name', value: 'datasetName'}
       ]
+      ,
+       selected: [],
+        allSelected: false,
     }
   },
   methods: {
