@@ -26,6 +26,8 @@
             </v-text-field>
           </ValidationProvider>
 
+          <AddCustodianAndOwner ref="AddCustodianAndOwner"></AddCustodianAndOwner>
+
           <v-btn
             :loading="isLoading"
             class="mr-4"
@@ -51,6 +53,7 @@
 import DatasetService from '@/api/DatasetService'
 import { extend } from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
+import AddCustodianAndOwner from '@/components/general/AddCustodianAndOwner'
 
 // Add the required rule. unique rule is done when component is mounted
 extend('required', {
@@ -67,13 +70,27 @@ export default {
       succuessfulCreation: false,
       displayErrorMessage: false,
       loading: false,
-      datanameIsUnique: true
+      datanameIsUnique: true,
+      ownerPf: ""
     }
+  },
+  components: {
+    AddCustodianAndOwner
   },
   methods: {
     submitForm() {
       this.loading=true
-      DatasetService.createNewDataset(this.datasetName, this.datasetDescription)
+      this.ownerPf = this.$refs.AddCustodianAndOwner.$data.ownerPf
+
+      var status = this.$refs.AddCustodianAndOwner.$data.status
+      var custodianPfs = this.$refs.AddCustodianAndOwner.$data.custodianPfs
+
+      if (status === "custodian") {
+        custodianPfs.push("1001") // hardcoded custodian
+      } else { // user submitting is owner
+        this.ownerPf = "1001" // hardcoded for now
+      }
+      DatasetService.createNewDataset(this.datasetName, this.datasetDescription, custodianPfs, this.ownerPf)
         .then(result => {
           this.loading=false
           if (result.data==true) {
@@ -106,9 +123,11 @@ export default {
       // 1. name cannot be null/empty
       // 2. name must be unique
       // 3. description cannot be null/empty
+      // 4. owner must be declared/user declares he is owner
       return this.datasetName!=null && this.datasetName.length>0 &&
         this.datanameIsUnique==true &&
-        this.datasetDescription!=null && this.datasetDescription.length>0
+        this.datasetDescription!=null && this.datasetDescription.length>0 &&
+        ((this.$refs.AddCustodianAndOwner.$data.ownerPf!=null && this.$refs.AddCustodianAndOwner.$data.ownerPf.length>0) || this.$refs.AddCustodianAndOwner.$data.status=="owner")
     },
     isLoading() {
       return this.loading
