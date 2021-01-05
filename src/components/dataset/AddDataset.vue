@@ -26,7 +26,10 @@
             </v-text-field>
           </ValidationProvider>
 
+          <AddCustodians ref="AddCustodians"></AddCustodians>
+
           <AddCustodianAndOwner ref="AddCustodianAndOwner"></AddCustodianAndOwner>
+
 
           <v-btn
             :loading="isLoading"
@@ -53,7 +56,9 @@
 import DatasetService from '@/api/DatasetService'
 import { extend } from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
-import AddCustodianAndOwner from '@/components/general/AddCustodianAndOwner'
+import AddCustodianAndOwner from '@/components/general/AddCustodianAndOwner.vue'
+import AddCustodians from '@/components/general/AddCustodians.vue'
+
 
 // Add the required rule. unique rule is done when component is mounted
 extend('required', {
@@ -75,7 +80,8 @@ export default {
     }
   },
   components: {
-    AddCustodianAndOwner
+    AddCustodianAndOwner,
+    AddCustodians
   },
   methods: {
     submitForm() {
@@ -83,7 +89,7 @@ export default {
       this.ownerPf = this.$refs.AddCustodianAndOwner.$data.ownerPf
 
       var status = this.$refs.AddCustodianAndOwner.$data.status
-      var custodianPfs = this.$refs.AddCustodianAndOwner.$data.custodianPfs
+      var custodianPfs = this.$refs.AddCustodians.$data.custodianPfs
 
       if (status === "custodian") {
         custodianPfs.push("1001") // hardcoded custodian
