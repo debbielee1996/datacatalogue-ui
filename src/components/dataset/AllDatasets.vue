@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        {{ allDatasets.length }} dataset(s) found
+        {{ this.allDatasetsLength }} dataset(s) found
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -54,7 +54,8 @@ export default {
     getAllDatasetDtos() {
       DatasetService.getAllDatasetDtos()
         .then(response => {
-          this.allDatasets=response.data;
+          this.allDatasets=response.data
+          this.allDatasetsLength=this.allDatasets.length
         })
         .catch(e => console.log(e))
     }
