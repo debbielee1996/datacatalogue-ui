@@ -3,7 +3,7 @@
     <v-container>
       <h2>Add New Dataset</h2>
       <ValidationObserver ref="v-form">
-        <v-form>
+        <v-form ref="vform">
           <ValidationProvider name="dataset name" rules="required|unique" v-slot = "{ errors }">
             <v-text-field
               v-model="datasetName"
@@ -30,14 +30,21 @@
 
           <AddCustodianAndOwner ref="AddCustodianAndOwner"></AddCustodianAndOwner>
 
-
           <v-btn
+            color="primary"
             :loading="isLoading"
             class="mr-4"
             :disabled="!canCreateDataset"
             @click="submitForm"
           >
-            submit
+            submit >>
+          </v-btn>
+          <v-btn
+            color="grey"
+            class="mr-4"
+            @click="resetForm"
+          >
+            reset
           </v-btn>
         </v-form>
       </ValidationObserver>
@@ -76,7 +83,9 @@ export default {
       displayErrorMessage: false,
       loading: false,
       datanameIsUnique: true,
-      ownerPf: ""
+      ownerPf: "",
+      status: "",
+      custodianPfs: []
     }
   },
   components: {
@@ -88,15 +97,15 @@ export default {
       this.loading=true
       this.ownerPf = this.$refs.AddCustodianAndOwner.$data.ownerPf
 
-      var status = this.$refs.AddCustodianAndOwner.$data.status
-      var custodianPfs = this.$refs.AddCustodians.$data.custodianPfs
+      this.status = this.$refs.AddCustodianAndOwner.$data.status
+      this.custodianPfs = this.$refs.AddCustodians.$data.custodianPfs
 
-      if (status === "custodian") {
-        custodianPfs.push("1001") // hardcoded custodian
+      if (this.status === "custodian") {
+        this.custodianPfs.push("1001") // hardcoded custodian
       } else { // user submitting is owner
         this.ownerPf = "1001" // hardcoded for now
       }
-      DatasetService.createNewDataset(this.datasetName, this.datasetDescription, custodianPfs, this.ownerPf)
+      DatasetService.createNewDataset(this.datasetName, this.datasetDescription, this.custodianPfs, this.ownerPf)
         .then(result => {
           this.loading=false
           if (result.data==true) {
@@ -113,6 +122,9 @@ export default {
           this.succuessfulCreation=false
           this.displayErrorMessage=true
           console.log(e) })
+    },
+    resetForm() {
+      this.$refs.vform.reset()
     },
     datasetNameIsUnique() {
       const output = DatasetService.datasetNameIsUnique(this.datasetName)
