@@ -131,6 +131,7 @@ export default {
       allDatasets: [],
       dataTableName: '',
       dataTableDescription: '',
+      isPublic:false,
       selectedDatasetId: '',
       file: null,
       succuessfulCreation: false,
@@ -162,7 +163,7 @@ export default {
     },
     submitForm() {
       this.loading=true
-      DataTableService.uploadFile(this.file, this.dataTableName, this.selectedDatasetId, this.dataTableDescription, this.selectedDataTypes, this.dataColDescriptions)
+      DataTableService.uploadFile(this.file, this.dataTableName, this.selectedDatasetId, this.dataTableDescription, this.selectedDataTypes, this.dataColDescriptions,this.isPublic)
       .then(() => {
         this.loading=false
         this.succuessfulCreation=true

@@ -26,7 +26,9 @@
           <mark
             v-if="item.officerPf==1001"
             style="background-color:#DEFABB"
-          ><b>{{ item.officerPf }}</b></mark>
+          >
+            <b>{{ item.officerPf }}</b>
+          </mark>
           <div v-else>{{ item.officerPf }}</div>
         </template>
 
@@ -38,13 +40,6 @@
             @click="editItem(item)"
           >
             mdi-pencil
-          </v-icon>
-<v-icon
-            small
-            class="mr-2"
-            @click="editPrivacyAccess(privacy)"
-          >
-            mdi-account-plus
           </v-icon>
 
           <!-- retain-focus to prevent maximum call stack size exceed error https://stackoverflow.com/questions/61444870/maximum-call-stack-size-exceeded-vuetify -->
@@ -92,47 +87,51 @@
             </v-card>
           </v-dialog>
 
-<!-- dialog for setting privacy -->
+  <!-- icon to edit privacy -->
+          <v-icon
+            small
+            class="mr-2"
+            @click="editPrivacyAccess(item)"
+          >
+            mdi-account-plus
+          </v-icon>
 
-<v-dialog
+        <!-- dialog for setting privacy -->
+          <v-dialog
             :retain-focus="false"
             v-model="privacyDialog"
             max-width="500px"
-
           >
             <v-card>
               <v-card-title>
-                <span class="headline">Privacy Setting</span>
+                <span class="headline">Privacy Setting </span>
               </v-card-title>
-<v-container>
-                          
-<v-radio-group v-model="editedPrivacyAccess">
-        <v-radio  
-                  value="true"
-                >
-                <template v-slot:label>
-                   <div>
-                  <p style="color:black;  margin: 0;
-    padding: 0;font-weight: bold;">Public</p>
-                      <p>Everyone have access</p></div>
-                </template>
+              <v-container>  
+                <v-radio-group v-model="editedPrivacyAccess.isPublic">
+                  <v-radio  
+                    :value=true
+                    :key=true
+                  >
+                    <template v-slot:label>
+                      <div>
+                        <p style="color:black;  margin: 0;
+                        padding: 0;font-weight: bold;">Public</p>
+                        <p>Everyone have access</p></div>
+                    </template>
                   </v-radio>
-                 <v-radio
-                  value="false"
-                >
-                 <template v-slot:label>
-                   <div>
-                  <p style="color:black;  margin: 0;
-    padding: 0;font-weight: bold;">Private</p>
-                      <p>Only data owner/custodians have access</p></div>
-                </template>
-                
-                </v-radio>
-      </v-radio-group>
-
-
-</v-container>
-
+                  <v-radio
+                    :value=false
+                    :key=false
+                  >
+                    <template v-slot:label>
+                      <div>
+                        <p style="color:black;  margin: 0;
+                        padding: 0;font-weight: bold;">Private</p>
+                        <p>Only data owner/custodians have access</p></div>
+                    </template>
+                  </v-radio>
+                </v-radio-group>
+              </v-container>
 
               <!-- save/cancel buttons -->
               <v-card-actions>
@@ -147,7 +146,6 @@
                 <v-btn
                   color="blue darken-1"
                   text
-                  :disabled="!canEdit"
                   @click="savePrivacyDialog"
                 >
                   Save
@@ -187,17 +185,17 @@ export default {
       
       editDialog: false,
       editedItem: {
-        description:''
+        description:'',
       },
       defaultItem: {
-        description:''
+        description:'',
       },
        privacyDialog: false,
       editedPrivacyAccess: {
-        isPublic:''
+        isPublic:null
       },
       defaultPrivacyAccess: {
-        isPublic:''
+        isPublic:null
       }
     }
   },
@@ -236,10 +234,12 @@ this.editedPrivacyAccess = Object.assign({}, item)
       })
     },
     savePrivacyDialog() {
-      DataTableService.editDataTableDescription(this.editedItem.id, this.editedItem.description)
+      DataTableService.editDataTablePrivacy(this.editedPrivacyAccess.id, this.editedPrivacyAccess.isPublic)
         .then(() => { this.getAllDataTableDtos() })
         .catch(e => { console.log(e) })
-      this.close()
+     
+       
+      this.privacyDialog = false
     }
   },
   created() {
@@ -248,7 +248,7 @@ this.editedPrivacyAccess = Object.assign({}, item)
   computed: {
     canEdit() {
       return this.editedItem.description.length>0
-    }
+    },
   }
 }
 </script>

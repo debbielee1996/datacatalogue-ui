@@ -6,14 +6,10 @@
         <v-spacer></v-spacer>  
         
         <v-card-actions>
-
-          <!-- "'/datatable/'+item.id+'/allcolumns'" -->
-          <!-- /datatable/:dataTableId/SetPermissionallcolumns -->
-          <!-- to='/datatable/'+ {{item.id}} + '/SetPermissionallcolumns' -->
-          <!-- :href="'/datatable/'+item.id+'/allcolumns'" -->
-         <v-btn >
-         <a :href="'/datatable/'+ dataTableColumns[0].dataTableId+'/SetPermissionallcolumns'">Set Permission</a></v-btn>
-       </v-card-actions>
+         <!-- button to go to editdatatablecolumnsaccess page -->
+         <v-btn color="blue darken-1">
+         <a style="text-decoration: none; color:white;" :href="'/datatable/'+ dataTableColumns[0].dataTableId+'/SetPermissionallcolumns'">Set Permission</a></v-btn>
+        </v-card-actions>
       </v-card-title>
       <v-card-subtitle>
         Dataset: {{ dataTableColumns[0].datasetName }}
@@ -43,27 +39,9 @@
             <v-card>
               <v-card-title>
                 <span class="headline">Edit {{ editedItem.name }}</span>
-                </v-card-title>
+              </v-card-title>
 
               <v-container>
-<!-- je code start -->
- <ValidationProvider name="name" rules="required" v-slot = "{ errors }">
-                  <v-text-field
-                    v-model="editedItem.name"
-                    :error-messages="errors"
-                  >
-                    <template v-slot:label>Name <b style="color:red">*</b></template>
-                  </v-text-field>
-                </ValidationProvider>
-
-                  <!-- <v-select
-                    :items="options"
-                    :value="header"
-                    v-model="selectedDataTypes[index]"
-                  /> -->
-                
-
-<!-- je code end -->
                 <ValidationProvider name="description" rules="required" v-slot = "{ errors }">
                   <v-text-field
                     v-model="editedItem.description"
@@ -124,14 +102,10 @@ export default {
       ],
       editDialog: false,
       editedItem: {
-        name:'',
-        description: '',
-        type:''
+        description: ''
       },
       defaultItem: {
-        name:'',
-        description: '',
-        type:''
+        description: ''
       }
     }
   },
@@ -159,12 +133,6 @@ export default {
         .then(() => { this.getAllDataColumnDtos(this.dataTableId) })
         .catch(e => { console.log(e) })
       this.close()
-      
-      DataTableColumnService.editDataTableColumnName(this.editedItem.id,this.editedItem.name)
-        .then(() => { this.getAllDataColumnDtos(this.dataTableId) })
-        .catch(e => { console.log(e) })
-      this.close()
-
     }
   },
   computed: {
