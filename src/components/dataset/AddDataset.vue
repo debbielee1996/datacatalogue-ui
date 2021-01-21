@@ -3,7 +3,7 @@
     <v-container>
       <h2>Add New Dataset</h2>
       <ValidationObserver ref="v-form">
-        <v-form>
+        <v-form ref="vform">
           <ValidationProvider name="dataset name" rules="required|unique" v-slot = "{ errors }">
             <v-text-field
               v-model="datasetName"
@@ -26,13 +26,25 @@
             </v-text-field>
           </ValidationProvider>
 
+          <AddCustodians ref="AddCustodians"></AddCustodians>
+
+          <AddCustodianAndOwner ref="AddCustodianAndOwner"></AddCustodianAndOwner>
+
           <v-btn
+            color="primary"
             :loading="isLoading"
             class="mr-4"
             :disabled="!canCreateDataset"
             @click="submitForm"
           >
-            submit
+            submit >>
+          </v-btn>
+          <v-btn
+            color="grey"
+            class="mr-4"
+            @click="resetForm"
+          >
+            reset
           </v-btn>
         </v-form>
       </ValidationObserver>
@@ -51,6 +63,9 @@
 import DatasetService from '@/api/DatasetService'
 import { extend } from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
+import AddCustodianAndOwner from '@/components/general/AddCustodianAndOwner.vue'
+import AddCustodians from '@/components/general/AddCustodians.vue'
+
 
 // Add the required rule. unique rule is done when component is mounted
 extend('required', {
@@ -68,13 +83,30 @@ export default {
       succuessfulCreation: false,
       displayErrorMessage: false,
       loading: false,
-      datanameIsUnique: true
+      datanameIsUnique: true,
+      ownerPf: "",
+      status: "",
+      custodianPfs: []
     }
+  },
+  components: {
+    AddCustodianAndOwner,
+    AddCustodians
   },
   methods: {
     submitForm() {
       this.loading=true
-      DatasetService.createNewDataset(this.datasetName, this.datasetDescription,this.isPublic)
+      this.ownerPf = this.$refs.AddCustodianAndOwner.$data.ownerPf
+
+      this.status = this.$refs.AddCustodianAndOwner.$data.status
+      this.custodianPfs = this.$refs.AddCustodians.$data.custodianPfs
+
+      if (this.status === "custodian") {
+        this.custodianPfs.push("1001") // hardcoded custodian
+      } else { // user submitting is owner
+        this.ownerPf = "1001" // hardcoded for now
+      }
+      DatasetService.createNewDataset(this.datasetName, this.datasetDescription, this.custodianPfs, this.ownerPf, this.isPublic)
         .then(result => {
           this.loading=false
           if (result.data==true) {
@@ -92,6 +124,9 @@ export default {
           this.displayErrorMessage=true
           console.log(e) })
     },
+    resetForm() {
+      this.$refs.vform.reset()
+    },
     datasetNameIsUnique() {
       const output = DatasetService.datasetNameIsUnique(this.datasetName)
         .then(response => {
@@ -107,9 +142,11 @@ export default {
       // 1. name cannot be null/empty
       // 2. name must be unique
       // 3. description cannot be null/empty
+      // 4. owner must be declared/user declares he is owner
       return this.datasetName!=null && this.datasetName.length>0 &&
         this.datanameIsUnique==true &&
-        this.datasetDescription!=null && this.datasetDescription.length>0
+        this.datasetDescription!=null && this.datasetDescription.length>0 &&
+        ((this.$refs.AddCustodianAndOwner.$data.ownerPf!=null && this.$refs.AddCustodianAndOwner.$data.ownerPf.length>0) || this.$refs.AddCustodianAndOwner.$data.status=="owner")
     },
     isLoading() {
       return this.loading

@@ -3,7 +3,7 @@
     <v-container>
       <h2>Add New Data File</h2>
       <ValidationObserver ref="v-form">
-        <v-form>
+        <v-form ref="vform">
           <v-select
             v-model="selectedDatasetId"
             @change="checkDataTableNameIsUnique()"
@@ -93,12 +93,20 @@
           </v-container>
 
           <v-btn
+            color="primary"
             class="mr-4"
             :disabled="!canAddDataTable"
             :loading="isLoading"
             @click="submitForm"
           >
-            submit
+            submit >>
+          </v-btn>
+          <v-btn
+            color="grey"
+            class="mr-4"
+            @click="resetForm"
+          >
+            reset
           </v-btn>
         </v-form>
       </ValidationObserver>
@@ -176,6 +184,9 @@ export default {
         this.displayErrorMessage=true
         this.errorMsg=e.response.data
       })
+    },
+    resetForm() {
+      this.$refs.vform.reset()
     },
     parseFile() {
       if (this.file!=null && this.hasApprovedFileExtension) {

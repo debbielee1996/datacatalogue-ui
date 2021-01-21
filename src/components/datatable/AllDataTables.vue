@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        {{ allDataTables.length }} data table(s) found
+        {{ this.allDataTablesLength }} data table(s) found
         <v-spacer></v-spacer>
          <v-card-actions>
 
@@ -66,7 +66,8 @@ export default {
     getAllDataTableDtos() {
       DataTableService.getAllPublicDataTableDtos()
         .then(response => {
-          this.allDataTables=response.data;
+          this.allDataTables=response.data
+          this.allDataTablesLength=this.allDataTables.length
         })
         .catch(e => console.log(e))
     }

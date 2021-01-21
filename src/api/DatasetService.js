@@ -10,10 +10,12 @@ class DatasetService {
     return axios.get(settings.url + '/dataset/get-all-public-dataset-dtos')
   }
 
-  createNewDataset(datasetName, datasetDescription,datasetPrivacy) {
+  createNewDataset(datasetName, datasetDescription, custodianPfs, ownerPf, datasetPrivacy) {
     let formData = new FormData();
     formData.append("name", datasetName);
     formData.append("description", datasetDescription);
+    formData.append("custodianPfs", custodianPfs);
+    formData.append("ownerPf", ownerPf);
     formData.append("isPublic", datasetPrivacy);
     return axios.post(settings.url + '/dataset/create-new-dataset', formData)
   }

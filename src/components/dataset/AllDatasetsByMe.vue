@@ -2,7 +2,7 @@
   <v-container>
     <v-card>
       <v-card-title>
-        {{ allDatasets.length }} dataset(s) found
+        {{ this.allDatasetsLength }} dataset(s) found
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -11,6 +11,7 @@
           single-line
         ></v-text-field>
       </v-card-title>
+
       <v-data-table
         :headers="headers"
         :items="allDatasets"
@@ -28,7 +29,7 @@
             style="background-color:#DEFABB"
           ><b>{{ item.officerPf }}</b></mark>
         </template>
-   <!-- edit privacy -->
+        <!-- edit privacy -->
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             small
@@ -38,7 +39,7 @@
            mdi-account-plus
           </v-icon>
           <!-- retain-focus to prevent maximum call stack size exceed error https://stackoverflow.com/questions/61444870/maximum-call-stack-size-exceeded-vuetify -->
-        
+
                   <v-dialog
             :retain-focus="false"
             v-model="privacyDialog"
@@ -49,63 +50,50 @@
               <v-card-title>
                 <span class="headline">Privacy Setting </span>
               </v-card-title>
-<v-container>
-  
-<v-radio-group v-model="editedPrivacyAccess.isPublic">
 
-               <v-radio 
-                :value=true
-               :key=true
-                >
-                <template v-slot:label>
-                   <div>
-                  <p style="color:black;  margin: 0;
-    padding: 0;font-weight: bold;">Public</p>
-                      <p>Everyone have access</p></div>
-                </template>
+              <v-container>
+                <v-radio-group v-model="editedPrivacyAccess.isPublic">
+                  <v-radio
+                    :value=true
+                    :key=true>
+                    <template v-slot:label>
+                      <div>
+                      <p style="color:black;  margin: 0; padding: 0;font-weight: bold;">Public</p>
+                      <p>Anyone can view it under 'Available Datasets'</p></div>
+                    </template>
                   </v-radio>
-                 <v-radio
-                 :value=false
-                 :key=false
-                >
-                 <template v-slot:label>
-                   <div>
-                  <p style="color:black;  margin: 0;
-    padding: 0;font-weight: bold;">Private</p>
-                      <p>Only data owner/custodians have access</p></div>
-                </template>
-                
-                </v-radio>
-      </v-radio-group>
-
-
-</v-container>
+                  <v-radio
+                    :value=false
+                    :key=false>
+                    <template v-slot:label>
+                      <div>
+                      <p style="color:black;  margin: 0; padding: 0;font-weight: bold;">Private</p>
+                          <p>No can view it under 'Available Datasets'</p></div>
+                    </template>
+                    </v-radio>
+                </v-radio-group>
+              </v-container>
                 <!-- save/cancel buttons -->
-            
-            <v-card-actions>
-<v-spacer></v-spacer>
-              <v-btn
-              color="blue darken-1"
-              text
-               @click="closePrivacyDialog"
-               >
-                Cancel
-              </v-btn>
-
-              <v-btn
-              color="blue darken-1"
-              text
-              @click="savePrivacyDialog"
-              >
-                Save
-              </v-btn>
-
-            </v-card-actions>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                color="blue darken-1"
+                text
+                @click="closePrivacyDialog"
+                >
+                  Cancel
+                </v-btn>
+                <v-btn
+                color="blue darken-1"
+                text
+                @click="savePrivacyDialog"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
             </v-card>
           </v-dialog>
-
         </template>
-     
       </v-data-table>
     </v-card>
   </v-container>
@@ -137,10 +125,11 @@ export default {
     getAllDatasetDtos() {
       DatasetService.getDatasetsCreatedByOfficer()
         .then(response => {
-          this.allDatasets=response.data;
+          this.allDatasets=response.data
+          this.allDatasetsLength=this.allDatasets.length
         })
         .catch(e => console.log(e))
-    }, 
+    },
     editPrivacyAccess(item) {
       this.editedPrivacyAccess = Object.assign({}, item)
       this.privacyDialog=true
@@ -163,7 +152,7 @@ export default {
   created() {
     this.getAllDatasetDtos();
   },
-   
+
      computed: {
     canEdit() {
       return this.editedPrivacyType.isPublic.length>0

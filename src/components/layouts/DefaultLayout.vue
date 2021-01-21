@@ -116,29 +116,29 @@
         title: "New Dataset",
         action: "/adddataset"
       },
-      alldatasets: {
-        icon: "mdi-file-document",
-        title: "All datasets",
-        action: "/alldatasets"
-      },
       adddatatable: {
         icon: "mdi-new-box",
         title: "New Data File",
         action: "/adddatafile"
       },
+      alldatasets: {
+        icon: "mdi-file-document",
+        title: "Available datasets",
+        action: "/alldatasets"
+      },
       alldatatables: {
         icon: "mdi-file-table",
-        title: "All datatables",
+        title: "Available datatables",
         action: "/alldatatables"
       },
       mydatasets: {
         icon: "mdi-file-document",
-        title: "My datasets",
+        title: "Managed datasets",
         action: "/mydatasets"
       },
       mydatatables: {
         icon: "mdi-file-table",
-        title: "My datatables",
+        title: "Managed datatables",
         action: "/mydatatables"
       },
       logout: {
