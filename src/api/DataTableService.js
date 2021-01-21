@@ -22,6 +22,7 @@ class DataTableService {
     formData.append("description", dataTableDescription);
     formData.append("dataTypes", selectedDataTypes);
     formData.append("dataColDescriptions", dataColDescriptions);
+    formData.append("isPublic", true);
     return axios.post(settings.url + '/datatable/upload-file', formData)
   }
 
