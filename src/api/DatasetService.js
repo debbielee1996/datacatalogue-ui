@@ -6,10 +6,15 @@ class DatasetService {
     return axios.get(settings.url + '/dataset/get-all-dataset-dtos')
   }
 
-  createNewDataset(datasetName, datasetDescription) {
+  getAllPublicDatasetDtos() {
+    return axios.get(settings.url + '/dataset/get-all-public-dataset-dtos')
+  }
+
+  createNewDataset(datasetName, datasetDescription,datasetPrivacy) {
     let formData = new FormData();
     formData.append("name", datasetName);
     formData.append("description", datasetDescription);
+    formData.append("isPublic", datasetPrivacy);
     return axios.post(settings.url + '/dataset/create-new-dataset', formData)
   }
 
@@ -23,6 +28,13 @@ class DatasetService {
         datasetName: datasetName
       }
     })
+  }
+
+  editDataSetPrivacy(datasetId, datasetPrivacy) {
+    let formData = new FormData()
+    formData.append("datasetId", datasetId)
+    formData.append("isPublic", datasetPrivacy)
+    return axios.post(settings.url + '/dataset/edit-privacy', formData)
   }
 }
 

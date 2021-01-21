@@ -6,6 +6,10 @@ class DataTableService {
     return axios.get(settings.url + '/datatable/get-all-datatable-dtos')
   }
 
+  getAllPublicDataTableDtos() {
+    return axios.get(settings.url + '/datatable/get-all-public-datatable-dtos')
+  }
+
   getDataTablesForDataset(datasetId) {
     return axios.get(settings.url + '/datatable/get-dataset-datatables/'+ datasetId)
   }
@@ -14,7 +18,7 @@ class DataTableService {
     return axios.get(settings.url + '/datatable/get-all-datatables-created')
   }
 
-  uploadFile(file, dataTableName, selectedDatasetId, dataTableDescription, selectedDataTypes, dataColDescriptions) {
+  uploadFile(file, dataTableName, selectedDatasetId, dataTableDescription, selectedDataTypes, dataColDescriptions,dataTablePrivacy) {
     let formData = new FormData();
     formData.append("file", file)
     formData.append("tableName", dataTableName);
@@ -22,6 +26,7 @@ class DataTableService {
     formData.append("description", dataTableDescription);
     formData.append("dataTypes", selectedDataTypes);
     formData.append("dataColDescriptions", dataColDescriptions);
+    formData.append("isPublic", dataTablePrivacy);
     return axios.post(settings.url + '/datatable/upload-file', formData)
   }
 
@@ -31,6 +36,13 @@ class DataTableService {
     formData.append("description", dataTableDescription)
     return axios.post(settings.url + '/datatable/edit-description', formData)
   }
+  editDataTablePrivacy(dataTableId, dataTablePrivacy) {
+    let formData = new FormData()
+    formData.append("dataTableId", dataTableId)
+    formData.append("isPublic", dataTablePrivacy)
+    return axios.post(settings.url + '/datatable/edit-privacy', formData)
+  }
+
 
   dataTableNameIsUnique(dataTableName, datasetId) {
     if (datasetId.length!=0) {
