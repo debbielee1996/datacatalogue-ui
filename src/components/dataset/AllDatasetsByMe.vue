@@ -28,12 +28,12 @@
             style="background-color:#DEFABB"
           ><b>{{ item.officerPf }}</b></mark>
         </template>
-   <!-- edit item -->
+   <!-- edit privacy -->
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             small
             class="mr-2"
-            @click="editPrivacyAccess(item)"
+            @click="editPrivacyAccess(item);"
           >
            mdi-account-plus
           </v-icon>
@@ -50,9 +50,12 @@
                 <span class="headline">Privacy Setting </span>
               </v-card-title>
 <v-container>
-<v-radio-group v-model="editedPrivacyAccess">
-        <v-radio  
-                  value="true"
+  
+<v-radio-group v-model="editedPrivacyAccess.isPublic">
+
+               <v-radio 
+                :value=true
+               :key=true
                 >
                 <template v-slot:label>
                    <div>
@@ -62,7 +65,8 @@
                 </template>
                   </v-radio>
                  <v-radio
-                  value="false"
+                 :value=false
+                 :key=false
                 >
                  <template v-slot:label>
                    <div>
@@ -82,13 +86,17 @@
 <v-spacer></v-spacer>
               <v-btn
               color="blue darken-1"
-              text>
+              text
+               @click="closePrivacyDialog"
+               >
                 Cancel
               </v-btn>
 
               <v-btn
               color="blue darken-1"
-              text>
+              text
+              @click="savePrivacyDialog"
+              >
                 Save
               </v-btn>
 
@@ -105,8 +113,6 @@
 
 <script>
 import DatasetService from '@/api/DatasetService'
-
-
 export default {
   data() {
     return {
@@ -115,16 +121,15 @@ export default {
       headers: [
         {text: 'Name', value: 'name'},
         {text: 'Description', value: 'description'},
-        {text: 'public', value: 'isPublic'},
         {text: 'Created By', value: 'officerPf'},
         {text: 'Action', value: 'actions'}
       ],
         privacyDialog: false,
       editedPrivacyAccess: {
-        isPublic:''
+        isPublic:null
       },
       defaultPrivacyAccess: {
-        isPublic:''
+        isPublic:null
       }
     }
   },
@@ -137,7 +142,7 @@ export default {
         .catch(e => console.log(e))
     }, 
     editPrivacyAccess(item) {
-      this.editedPrivacyType = Object.assign({}, item)
+      this.editedPrivacyAccess = Object.assign({}, item)
       this.privacyDialog=true
     },
     closePrivacyDialog () {
@@ -147,10 +152,11 @@ export default {
       })
     },
     savePrivacyDialog() {
-      // DataTableService.editDataTableDescription(this.editedItem.id, this.editedItem.description)
-      //   .then(() => { this.getAllDataTableDtos() })
-      //   .catch(e => { console.log(e) })
-      // this.close()
+       DatasetService.editDataSetPrivacy(this.editedPrivacyAccess.id, this.editedPrivacyAccess.isPublic)
+        .then(() => { this.getAllDatasetDtos() })
+        .catch(e => { console.log(e) })
+
+      this.privacyDialog = false
     }
 
   },

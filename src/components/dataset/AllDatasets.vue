@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       allDatasets: [],
-      search: '',
+      search:"",
       headers: [
         {text: 'Name', value: 'name'},
         {text: 'Description', value: 'description'},
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     getAllDatasetDtos() {
-      DatasetService.getAllDatasetDtos()
+      DatasetService.getAllPublicDatasetDtos()
         .then(response => {
           this.allDatasets=response.data;
         })
@@ -61,6 +61,6 @@ export default {
   },
   created() {
     this.getAllDatasetDtos();
-  }
+  },
 }
 </script>
