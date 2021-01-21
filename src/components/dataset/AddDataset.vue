@@ -79,6 +79,7 @@ export default {
       datasetName: '',
       datasetDescription: '',
       outputMsg: '',
+      isPublic:false,
       succuessfulCreation: false,
       displayErrorMessage: false,
       loading: false,
@@ -105,7 +106,7 @@ export default {
       } else { // user submitting is owner
         this.ownerPf = "1001" // hardcoded for now
       }
-      DatasetService.createNewDataset(this.datasetName, this.datasetDescription, this.custodianPfs, this.ownerPf)
+      DatasetService.createNewDataset(this.datasetName, this.datasetDescription, this.custodianPfs, this.ownerPf, this.isPublic)
         .then(result => {
           this.loading=false
           if (result.data==true) {

@@ -3,11 +3,18 @@
     <v-card>
       <v-card-title>
         Data Table: {{ dataTableColumns[0].dataTableName }}
-        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>  
+        
+        <v-card-actions>
+         <!-- button to go to editdatatablecolumnsaccess page -->
+         <v-btn color="blue darken-1">
+         <a style="text-decoration: none; color:white;" :href="'/datatable/'+ dataTableColumns[0].dataTableId+'/SetPermissionallcolumns'">Set Permission</a></v-btn>
+        </v-card-actions>
       </v-card-title>
       <v-card-subtitle>
         Dataset: {{ dataTableColumns[0].datasetName }}
       </v-card-subtitle>
+     
       <v-data-table
         :headers="headers"
         :items="dataTableColumns"
@@ -32,7 +39,7 @@
             <v-card>
               <v-card-title>
                 <span class="headline">Edit {{ editedItem.name }}</span>
-                </v-card-title>
+              </v-card-title>
 
               <v-container>
                 <ValidationProvider name="description" rules="required" v-slot = "{ errors }">
@@ -122,7 +129,7 @@ export default {
       })
     },
     save() {
-      DataTableColumnService.editDataTableColumnDescription(this.editedItem.id, this.editedItem.description)
+      DataTableColumnService.editDataTableColumnDescription(this.editedItem.id,this.editedItem.description)
         .then(() => { this.getAllDataColumnDtos(this.dataTableId) })
         .catch(e => { console.log(e) })
       this.close()

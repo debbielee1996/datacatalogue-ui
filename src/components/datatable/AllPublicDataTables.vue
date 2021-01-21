@@ -2,15 +2,8 @@
   <v-container>
     <v-card>
       <v-card-title>
-        {{ this.allDataTablesLength }} data table(s) found
+        {{ allPublicDataTables.length }} data table(s) found
         <v-spacer></v-spacer>
-         <v-card-actions>
-
-          <!-- button to go to AllPublicDataTables page -->
-         <v-btn color="blue darken-1">
-          <a style="text-decoration: none; color:white;" :href="'/allpublicdatatables'">View Public DataTables</a></v-btn>
-      
-       </v-card-actions>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -18,9 +11,10 @@
           single-line
         ></v-text-field>
       </v-card-title>
+      <!-- show public datatable. allPublicDataTables is computed -->
       <v-data-table
         :headers="headers"
-        :items="allDataTables"
+        :items="allPublicDataTables"
         :search="search"
       >
       
@@ -38,6 +32,13 @@
           <div v-else>{{ item.officerPf }}</div>
         </template>
 
+        <template v-slot:[`item.actions`]="{ item }">
+          
+          <a :href="'/datatable/'+item.id+'/allpubliccolumns'">
+            view
+          </a>
+        </template>
+
       </v-data-table>
     </v-card>
   </v-container>
@@ -52,30 +53,35 @@ export default {
       allDataTables: [],
       search: '',
       headers: [
-        {text: 'Name', value: 'name'},
-        {text: 'Description', value: 'description'},
+        {text: 'Dataset Name', value: 'datasetName'},
+        {text: 'Dataset Description', value: 'datasetDescription'},
+        {text: 'DataTable', value: 'name'},
+        {text: 'DataTable Description', value: 'description'},
         {text: 'Created By', value: 'officerPf'},
-        {text: 'Dataset Name', value: 'datasetName'}
-      ]
-      ,
-       selected: [],
-        allSelected: false,
+        {text: 'Action', value: 'actions'}
+      ],
     }
   },
   methods: {
     getAllDataTableDtos() {
       DataTableService.getAllPublicDataTableDtos()
         .then(response => {
-          this.allDataTables=response.data
-          this.allDataTablesLength=this.allDataTables.length
+          this.allDataTables=response.data;
         })
         .catch(e => console.log(e))
-    }
+    },
   },
   created() {
     this.getAllDataTableDtos();
   },
-
   
+   // filter to show datatable that is public in table
+   computed: {
+    allPublicDataTables() {
+      return this.allDataTables.filter(d => {
+        return (d.isPublic==true);
+      })
+    }
+  },
 }
 </script>

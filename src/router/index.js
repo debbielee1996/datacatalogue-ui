@@ -11,11 +11,13 @@ import AddDataset from '@/components/dataset/AddDataset.vue'
 import AllDatasetsByMe from '@/components/dataset/AllDatasetsByMe.vue'
 
 import AllDataTables from '@/components/datatable/AllDataTables.vue'
+import AllPublicDataTables from '@/components/datatable/AllPublicDataTables.vue'
 import AddDataTable from '@/components/datatable/AddDataTable.vue'
 import AllDataTablesByMe from '@/components/datatable/AllDataTablesByMe.vue'
 
 import AllDataTableColumnsOfDataTable from '@/components/datatablecolumn/AllDataTableColumnsOfDataTable.vue'
-
+import AllPublicDataTableColumnsOfPublicDataTable from '@/components/datatablecolumn/AllPublicDataTableColumnsOfPublicDataTable.vue'
+import EditDataTableColumnsAccess from '@/components/datatablecolumn/EditDataTableColumnsAccess.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -47,6 +49,11 @@ const routes = [
     component: AllDataTables
   },
   {
+    path: '/allpublicdatatables',
+    name: 'AllPublicDataTables',
+    component: AllPublicDataTables
+  },
+  {
     path: '/dataset/:datasetId/alldatatables',
     name: 'AllDataTablesOfDataset',
     component: AllDataTablesOfDataset
@@ -65,6 +72,16 @@ const routes = [
     path: '/datatable/:dataTableId/allcolumns',
     name: 'AllDataTableColumnsOfDataTable',
     component: AllDataTableColumnsOfDataTable
+  },
+  {
+    path: '/datatable/:dataTableId/allpubliccolumns',
+    name: 'AllPublicDataTableColumnsOfPublicDataTable',
+    component: AllPublicDataTableColumnsOfPublicDataTable
+  },
+  {
+    path: '/datatable/:dataTableId/SetPermissionallcolumns',
+    name: 'EditDataTableColumnsAccess',
+    component: EditDataTableColumnsAccess
   },
   {
     path: '/mydatasets',
