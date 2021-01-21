@@ -12,6 +12,7 @@ class DatasetService {
     formData.append("description", datasetDescription);
     formData.append("custodianPfs", custodianPfs);
     formData.append("ownerPf", ownerPf);
+    formData.append("isPublic", true);
     return axios.post(settings.url + '/dataset/create-new-dataset', formData)
   }
 
