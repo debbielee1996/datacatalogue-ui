@@ -64,6 +64,13 @@
             <v-list-item-title>{{ alldatatables.title }}</v-list-item-title>
         </v-list-item>
 
+        <v-list-item :to="dataanalysis.action">
+            <v-list-item-icon>
+              <v-icon>{{ dataanalysis.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>{{ dataanalysis.title }}</v-list-item-title>
+        </v-list-item>
+
         <v-divider></v-divider>
 
         <v-list-item :to="mydatasets.action">
@@ -130,6 +137,11 @@
         icon: "mdi-file-table",
         title: "Available datatables",
         action: "/alldatatables"
+      },
+      dataanalysis: {
+        icon: "mdi-file-table",
+        title: "Data & Analysis",
+        action: "/dataanalysis"
       },
       mydatasets: {
         icon: "mdi-file-document",

@@ -5,6 +5,8 @@ import Login from '@/components/general/Login.vue'
 import Logout from '@/components/general/Logout.vue'
 import Home from '@/components/general/Home.vue'
 
+import DataAnalysis from '@/components/dataanalysis/DataAnalysis.vue'
+
 import AllDatasets from '@/components/dataset/AllDatasets.vue'
 import AllDataTablesOfDataset from '@/components/dataset/AllDataTablesOfDataset.vue'
 import AddDataset from '@/components/dataset/AddDataset.vue'
@@ -37,6 +39,11 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/dataanalysis',
+    name: 'DataAnalysis',
+    component: DataAnalysis
   },
   {
     path: '/alldatasets',
