@@ -68,7 +68,7 @@
                     <template v-slot:label>
                       <div>
                       <p style="color:black;  margin: 0; padding: 0;font-weight: bold;">Private</p>
-                          <p>No can view it under 'Available Datasets'</p></div>
+                          <p>No one can view it under 'Available Datasets'</p></div>
                     </template>
                     </v-radio>
                 </v-radio-group>
